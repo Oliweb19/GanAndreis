@@ -1,0 +1,126 @@
+/*--- Contenedor Principal ---*/
+.cont-search {
+    width: 100%;
+    min-height: 80vh; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 20px 50px 20px;
+}
+
+/*--- Tarjeta de Búsqueda ---*/
+.box-search {
+    width: 100%;
+    max-width: 500px;
+    background: linear-gradient(
+        135deg, 
+        rgba(44, 44, 46, 0.8), 
+        rgba(28, 28, 30, 0.95)
+    );
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    padding: 40px;
+    text-align: center;
+    color: var(--blanco);
+    animation: fadeIn 0.8s ease;
+}
+
+.icon-header {
+    font-size: 3rem;
+    color: var(--color-primario);
+    margin-bottom: 20px;
+    text-shadow: 0 0 15px rgba(48, 209, 88, 0.4);
+}
+
+.box-search h1 { font-size: 2rem; margin-bottom: 10px; }
+.box-search p { color: var(--color-terciario); font-size: 0.95rem; margin-bottom: 30px; line-height: 1.5; }
+
+/*--- Formulario e Inputs ---*/
+.input-group { position: relative; margin-bottom: 20px; }
+
+.input-group i {
+    position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+    color: var(--color-terciario); font-size: 1.2rem;
+}
+
+.input-group input {
+    width: 100%; height: 55px;
+    background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px; padding: 0 20px 0 50px; 
+    color: var(--blanco); font-size: 1.1rem; outline: none; transition: all 0.3s ease;
+}
+
+.input-group input:focus { border-color: var(--color-primario); background: rgba(0, 0, 0, 0.5); }
+
+/* Quitar flechas del input number */
+.input-group input::-webkit-outer-spin-button,
+.input-group input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.btn-buscar {
+    width: 100%; height: 55px;
+    background: var(--color-primario); border: none; border-radius: 15px;
+    color: var(--negro); font-size: 1.1rem; font-weight: 800; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 5px 20px rgba(48, 209, 88, 0.2);
+}
+
+.btn-buscar:hover { transform: scale(1.02); box-shadow: 0 8px 25px rgba(48, 209, 88, 0.4); }
+
+/*--- ESTILOS DEL MODAL ---*/
+.modal-overlay {
+    display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px);
+    align-items: center; justify-content: center; animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: #1C1C1E; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 25px;
+    width: 90%; max-width: 800px; padding: 30px; position: relative;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5); animation: slideUp 0.4s ease;
+}
+
+.close-btn {
+    position: absolute; top: 20px; right: 25px; color: var(--color-terciario);
+    font-size: 2rem; font-weight: bold; cursor: pointer; transition: color 0.3s;
+}
+.close-btn:hover { color: var(--color-primario); }
+
+.modal-header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+.modal-header h2 { color: var(--blanco); font-size: 1.8rem; margin-bottom: 5px; }
+.modal-header p { color: var(--color-terciario); }
+
+/*--- Tabla de Resultados ---*/
+.table-container { 
+    overflow-x: auto; /* Permite scroll horizontal en móvil */
+}
+
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; color: var(--blanco); min-width: 600px; }
+th, td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+th { background-color: rgba(255, 255, 255, 0.05); color: var(--color-primario); font-weight: 600; text-transform: uppercase; }
+
+/* Badges */
+.badge { padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+.badge.validado { background: rgba(48, 209, 88, 0.2); color: var(--color-primario); border: 1px solid var(--color-primario); }
+.badge.pendiente { background: rgba(255, 214, 10, 0.2); color: #FFD60A; border: 1px solid #FFD60A; }
+
+.modal-footer { text-align: center; margin-top: 20px; }
+.modal-footer a { color: var(--color-primario); text-decoration: none; }
+
+/*--- Animaciones ---*/
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/*------------------------------------------*/
+/* RESPONSIVE (Adaptación Móvil)      */
+/*------------------------------------------*/
+
+@media (max-width: 600px) {
+    .box-search { padding: 30px 20px; }
+    .icon-header { font-size: 2.5rem; }
+    .box-search h1 { font-size: 1.5rem; }
+    
+    .modal-content { width: 95%; padding: 20px; }
+    th, td { padding: 10px; font-size: 0.85rem; }
+}

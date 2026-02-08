@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GanAndreis</title>
+    <!-- Estilos -->
+     <link rel="stylesheet" href="Assets/css/index.css">
+    <link rel="stylesheet" href="Assets/css/style-index.css">
+    <link rel="stylesheet" href="Assets/css/menu_and_footer.css">
+    <link rel="shortcut icon" href="Assets/img/logo-transparente.png" type="image/x-icon">
+    <!-- Icons -->
+	<link href="Assets/icons/fontawesome-free-6.2.1-web/css/all.css" rel="stylesheet">
+	<link href="Assets/icons/fontawesome-free-6.2.1-web/css/brands.css" rel="stylesheet">
+	<link href="Assets/icons/fontawesome-free-6.2.1-web/css/fontawesome.css" rel="stylesheet">
+	<link href="Assets/icons/fontawesome-free-6.2.1-web/css/regular.css" rel="stylesheet">
+	<link href="Assets/icons/fontawesome-free-6.2.1-web/css/solid.css" rel="stylesheet">
+	<link href="Assets/icons/fontawesome-free-6.2.1-web/css/svg-with-js.css" rel="stylesheet"> 
+</head>
+<body>
+    <header>
+        <div class="box-menu">
+            <div class="box-menu-opciones">
+                <ul>
+                    <li> <a href="index.html"> <i class="fa-solid fa-house"></i> Inicio</a></li>
+                    <li> <a href="validar_ticket.html"> <i class="fa-solid fa-ticket"></i> Ticket</a></li>
+                    <li> <a href="https://api.whatsapp.com/send/?phone=584241733873&text&type=phone_number&app_absent=0"> <i class="fa-solid fa-phone"></i> Ayuda</a></li>
+                </ul>
+            </div>
+
+            <div class="box-menu-logo">
+                <img src="Assets/img/logo-transparente.png" alt="">
+            </div>
+
+            <div class="box-menu-botones">
+                <a href="ini_sesion.html" id="ini">Iniciar Sesion</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="cont-main">
+            <div class="box-rifa">
+                <img src="Assets/img/Prueba.jpg" alt="Premio">
+                <h2>Gran Premio</h2>
+                <div class="box-fecha">
+                    <h3><i class="fa-solid fa-calendar"></i> 25/12/2026</h3>
+                    <h3><i class="fa-solid fa-clock"></i> 08:00 PM</h3>
+                </div>
+                <p>Participa por este increíble premio. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tu oportunidad de ganar es ahora.</p>
+            </div>
+
+            <div class="box-ticket">
+                
+                <div class="ticket-header">
+                    <h1><i class="fa-solid fa-ticket"></i> Compra de Boletos</h1>
+                </div>
+
+                <div class="box-cantidad-wrapper">
+                    <div class="box-cantidad">
+                        <button type="button" id="btn-minus"><i class="fa-solid fa-minus"></i></button>
+                        <h4 id="cantidad-tickets">1</h4>
+                        <button type="button" id="btn-plus"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <div class="total-price">
+                        <h5>Total a pagar:</h5>
+                        <p id="total-monto">$3.50</p>
+                    </div>
+                </div>
+
+                <form action="#" method="post" class="form-ticket">
+                    
+                    <h3><i class="fa-regular fa-id-card"></i> Datos Personales</h3>
+                    <div class="grid-inputs">
+                        <form action="#" method="post" class="form-ticket" novalidate>
+                          <input type="text" placeholder="Cédula / DNI" required>
+                            <input type="text" placeholder="Nombre Completo" required>
+                            <input type="email" placeholder="Correo Electrónico" required>
+                            <div class="tlf-group">
+                                <select name="cod-pais">
+                                    <option value="+58">+58</option>
+                                    <option value="+1">+1</option>
+                                    <option value="+34">+34</option>
+                                </select>
+                                <input type="number" placeholder="Teléfono" required>
+                            </div>  
+                        </form>
+                        
+                    </div>
+
+                    <h3><i class="fa-solid fa-building-columns"></i> Métodos de Pago</h3>
+                    <div class="box-pago">
+                        <ul class="opciones-pago">
+                            <li class="pago-item" data-metodo="pago-movil">
+                                <i class="fa-solid fa-mobile-screen-button"></i> <span>Pago Móvil</span>
+                            </li>
+                            <li class="pago-item" data-metodo="binance">
+                                <i class="fa-brands fa-bitcoin"></i> <span>Binance</span>
+                            </li>
+                            <li class="pago-item" data-metodo="zelle">
+                                <i class="fa-solid fa-z"></i> <span>Zelle</span>
+                            </li>
+                            <li class="pago-item" data-metodo="paypal">
+                                <i class="fa-brands fa-paypal"></i> <span>PayPal</span>
+                            </li>
+                        </ul>
+                        
+                        <div class="datos-pago-container" id="datos-pago-info">
+                            <p class="info-placeholder">Selecciona un método de pago para ver los datos.</p>
+                        </div>
+                    </div>
+
+                    <h3><i class="fa-solid fa-receipt"></i> Comprobante</h3>
+                    <div class="box-comprobante">
+                        <label for="file-upload" class="custom-file-upload">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Subir Capture
+                        </label>
+                        <input id="file-upload" type="file" name="comprobante">
+                        <span id="file-name">Ningún archivo seleccionado</span>
+                    </div>
+
+                    <button type="submit" class="btn-confirmar">CONFIRMAR COMPRA</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="cont-footer">
+            <div class="box-empresa">
+                <h1>GanAndreis</h1>
+                <p>
+                    ¿Y si hoy es tu día de suerte? 🍀 Únete a nuestra comunidad de ganadores. Rápido, seguro y a un solo 
+                    clic de distancia. ¡Tu premio te está esperando!
+                </p>
+            </div>
+            <div class="box-sociales">
+                <h1>Redes Sociales</h1>
+                <ul>
+                    <li><i class="fa-brands fa-instagram"></i> @Andreis_busines</li>
+                    <li><i class="fa-brands fa-tiktok"></i> @Andreis_business</li>
+                    <li><i class="fa-brands fa-whatsapp"></i> 0424-1733873</li>
+                </ul>
+            </div>
+        </div>
+        <div class="cont-copy">
+            <p>©COPYRIGHT GanAndreis 2026 - Todos los Derechos Reservados</p>
+        </div>
+    </footer>
+
+    <script src="Assets/js/logic.js"></script>
+</body>
+</html>

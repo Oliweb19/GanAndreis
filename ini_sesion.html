@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | GanAndreis</title>
+    <link rel="stylesheet" href="Assets/css/index.css">
+    <link rel="stylesheet" href="Assets/css/menu_and_footer.css">
+    <link rel="stylesheet" href="Assets/css/logeo.css">
+    <link rel="shortcut icon" href="Assets/img/logo-transparente.png" type="image/x-icon">
+    <link href="Assets/icons/fontawesome-free-6.2.1-web/css/all.css" rel="stylesheet">
+</head>
+<body>
+    
+    <header>
+        <div class="box-menu">
+            <div class="box-menu-opciones">
+                <ul>
+                    <li> <a href="index.html"> <i class="fa-solid fa-house"></i> Inicio</a></li>
+                    <li> <a href="validar_ticket.html"> <i class="fa-solid fa-ticket"></i> Ticket</a></li>
+                    <li> <a href="https://api.whatsapp.com/send/?phone=584241733873&text&type=phone_number&app_absent=0"> <i class="fa-solid fa-phone"></i> Ayuda</a></li>
+                </ul>
+            </div>
+
+            <div class="box-menu-logo">
+                <img src="Assets/img/logo-transparente.png" alt="">
+            </div>
+
+            <div class="box-menu-botones">
+                <a href="ini_sesion.html" id="ini">Iniciar Sesion</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="cont-log">
+            <div class="box-form">
+                <div class="header-form">
+                    <h1>Acceso Administrativo</h1>
+                    <p>Ingresa tus credenciales maestras</p>
+                </div>
+                
+                <form action="#" method="post">
+                    
+                    <div class="input-group">
+                        <label>Usuario / Correo</label>
+                        <input type="email" name="email" placeholder="admin@ganandreis.com" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Contraseña</label>
+                        <div class="password-container">
+                            <input type="password" name="password" id="passwordInput" placeholder="••••••••" required>
+                            <i class="fa-solid fa-eye" id="togglePassword"></i>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <a href="#">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <button type="submit" class="btn-login">INGRESAR AL SISTEMA</button>
+                </form>
+
+                <div class="social-login">
+                    <p>Contactar Soporte Técnico</p>
+                    <div class="box-social">
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                        <a href="https://wa.me/584241733873"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-redireccion">
+                <div class="overlay-content">
+                    <h1>Control Total</h1>
+                    <p>Bienvenido al panel central de GanAndreis.<br>Gestiona tus sorteos, supervisa tickets y conecta con tus ganadores desde un solo lugar.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="cont-footer">
+            <div class="box-empresa">
+                <h1>GanAndreis</h1>
+                <p>
+                    ¿Y si hoy es tu día de suerte? 🍀 Únete a nuestra comunidad de ganadores. Rápido, seguro y a un solo 
+                    clic de distancia. ¡Tu premio te está esperando!
+                </p>
+            </div>
+            <div class="box-sociales">
+                <h1>Redes Sociales</h1>
+                <ul>
+                    <li><i class="fa-brands fa-instagram"></i> @Andreis_busines</li>
+                    <li><i class="fa-brands fa-tiktok"></i> @Andreis_business</li>
+                    <li><i class="fa-brands fa-whatsapp"></i> 0424-1733873</li>
+                </ul>
+            </div>
+        </div>
+        <div class="cont-copy">
+            <p>©COPYRIGHT GanAndreis 2026 - Todos los Derechos Reservados</p>
+        </div>
+    </footer>
+
+    <script src="Assets/js/ojo_clave.js"></script>
+</body>
+</html>
