@@ -17,44 +17,91 @@ $totalRecaudado = 0;
 $totalBoletosValidados = 0;
 $totalBoletosPendientes = 0;
 $totalCompras = 0;
-$sorteoActual = [
-    'titulo' => 'Gran Premio',
-    'descripcion' => '',
-    'fecha_sorteo' => '2026-12-25',
-    'hora_sorteo' => '08:00 PM',
-    'precio_unitario' => 3.50
-];
+$todosSorteos = [];
+$todosAdmins = [];
+$sorteoActual = null;
 
 if ($pdo) {
     try {
-        // Datos del sorteo
-        $stmtS = $pdo->query("SELECT * FROM sorteos WHERE activo = 1 ORDER BY id DESC LIMIT 1");
-        if ($s = $stmtS->fetch()) {
-            $sorteoActual = $s;
+        // 1. Obtener todos los sorteos para el selector
+        $stmtTodosSorteos = $pdo->query("SELECT *, DATE_FORMAT(fecha_sorteo, '%d/%m/%Y') AS fecha_formateada FROM sorteos ORDER BY activo DESC, id DESC");
+        $todosSorteos = $stmtTodosSorteos->fetchAll();
+
+        // 2. Detectar sorteo: si se especifica ?sorteo_id se usa ese; si no, el sorteo ACTIVO (activo = 1)
+        $filtroId = isset($_GET['sorteo_id']) ? intval($_GET['sorteo_id']) : 0;
+        if ($filtroId > 0) {
+            foreach ($todosSorteos as $st) {
+                if ($st['id'] == $filtroId) {
+                    $sorteoActual = $st;
+                    break;
+                }
+            }
+        }
+        
+        // Si no se especificó o no se encontró, seleccionar el sorteo actualmente ACTIVO
+        if (!$sorteoActual) {
+            foreach ($todosSorteos as $st) {
+                if ($st['activo'] == 1) {
+                    $sorteoActual = $st;
+                    break;
+                }
+            }
         }
 
-        // Métricas
-        $totalRecaudado = (float)$pdo->query("SELECT COALESCE(SUM(total_monto), 0) FROM compras WHERE estado = 'validado'")->fetchColumn();
-        $totalBoletosValidados = (int)$pdo->query("SELECT COALESCE(COUNT(id), 0) FROM tickets WHERE estado = 'validado'")->fetchColumn();
-        $totalBoletosPendientes = (int)$pdo->query("SELECT COALESCE(COUNT(id), 0) FROM tickets WHERE estado = 'pendiente'")->fetchColumn();
-        $totalCompras = (int)$pdo->query("SELECT COUNT(id) FROM compras")->fetchColumn();
+        // Si aún no hay sorteo activo, tomar el primero de la lista
+        if (!$sorteoActual && !empty($todosSorteos)) {
+            $sorteoActual = $todosSorteos[0];
+        }
 
-        // Listado de compras con sus tickets
-        $stmtCompras = $pdo->query("
-            SELECT 
-                c.*,
-                DATE_FORMAT(c.creado_el, '%d/%m/%Y %h:%i %p') AS fecha_formateada,
-                GROUP_CONCAT(t.numero_ticket ORDER BY t.id ASC SEPARATOR ', ') AS lista_tickets
-            FROM compras c
-            LEFT JOIN tickets t ON t.compra_id = c.id
-            GROUP BY c.id
-            ORDER BY c.id DESC
-        ");
-        $compras = $stmtCompras->fetchAll();
+        $sorteoIdActual = $sorteoActual ? (int)$sorteoActual['id'] : 0;
 
-        // Todos los sorteos registrados
-        $stmtTodosSorteos = $pdo->query("SELECT *, DATE_FORMAT(fecha_sorteo, '%d/%m/%Y') AS fecha_formateada FROM sorteos ORDER BY id DESC");
-        $todosSorteos = $stmtTodosSorteos->fetchAll();
+        // 3. Métricas filtradas estrictamente por el sorteo detectado
+        if ($sorteoIdActual > 0) {
+            // Total recaudado de compras de este sorteo
+            $stmtRecaudado = $pdo->prepare("
+                SELECT COALESCE(SUM(c.total_monto), 0) 
+                FROM compras c
+                WHERE c.estado = 'validado' 
+                AND c.id IN (SELECT DISTINCT compra_id FROM tickets WHERE sorteo_id = ?)
+            ");
+            $stmtRecaudado->execute([$sorteoIdActual]);
+            $totalRecaudado = (float)$stmtRecaudado->fetchColumn();
+
+            // Boletos validados de este sorteo
+            $stmtBV = $pdo->prepare("SELECT COALESCE(COUNT(id), 0) FROM tickets WHERE sorteo_id = ? AND estado = 'validado'");
+            $stmtBV->execute([$sorteoIdActual]);
+            $totalBoletosValidados = (int)$stmtBV->fetchColumn();
+
+            // Boletos pendientes de este sorteo
+            $stmtBP = $pdo->prepare("SELECT COALESCE(COUNT(id), 0) FROM tickets WHERE sorteo_id = ? AND estado = 'pendiente'");
+            $stmtBP->execute([$sorteoIdActual]);
+            $totalBoletosPendientes = (int)$stmtBP->fetchColumn();
+
+            // Total solicitudes de este sorteo
+            $stmtTotC = $pdo->prepare("
+                SELECT COUNT(DISTINCT c.id) 
+                FROM compras c
+                INNER JOIN tickets t ON t.compra_id = c.id
+                WHERE t.sorteo_id = ?
+            ");
+            $stmtTotC->execute([$sorteoIdActual]);
+            $totalCompras = (int)$stmtTotC->fetchColumn();
+
+            // Listado de compras de este sorteo
+            $stmtCompras = $pdo->prepare("
+                SELECT 
+                    c.*,
+                    DATE_FORMAT(c.creado_el, '%d/%m/%Y %h:%i %p') AS fecha_formateada,
+                    GROUP_CONCAT(t.numero_ticket ORDER BY t.id ASC SEPARATOR ', ') AS lista_tickets
+                FROM compras c
+                INNER JOIN tickets t ON t.compra_id = c.id
+                WHERE t.sorteo_id = ?
+                GROUP BY c.id
+                ORDER BY c.id DESC
+            ");
+            $stmtCompras->execute([$sorteoIdActual]);
+            $compras = $stmtCompras->fetchAll();
+        }
 
         // Todos los administradores registrados
         $stmtTodosAdmins = $pdo->query("SELECT id, nombre, email, DATE_FORMAT(creado_el, '%d/%m/%Y') AS fecha_creado FROM administradores ORDER BY id DESC");
@@ -64,6 +111,19 @@ if ($pdo) {
         $errorBD = $e->getMessage();
     }
 }
+
+if (!$sorteoActual) {
+    $sorteoActual = [
+        'id' => 0,
+        'titulo' => 'Sin sorteo registrado',
+        'descripcion' => '',
+        'fecha_sorteo' => '2026-12-25',
+        'hora_sorteo' => '08:00 PM',
+        'precio_unitario' => 10.00,
+        'activo' => 0
+    ];
+}
+
 $todosSorteos = $todosSorteos ?? [];
 $todosAdmins = $todosAdmins ?? [];
 ?>
@@ -671,6 +731,86 @@ $todosAdmins = $todosAdmins ?? [];
             box-shadow: 0 0 10px rgba(48, 209, 88, 0.1);
         }
 
+        /* Barra de Sorteo Activo en Dashboard */
+        .sorteo-active-bar {
+            background: #141416;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 20px 24px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .sorteo-active-bar.is-live {
+            border-color: rgba(48, 209, 88, 0.45);
+            background: rgba(48, 209, 88, 0.03);
+            box-shadow: 0 0 25px rgba(48, 209, 88, 0.08);
+        }
+        .sorteo-active-info h2 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin: 6px 0 4px 0;
+            color: #fff;
+        }
+        .sorteo-active-info p {
+            font-size: 0.85rem;
+            color: var(--color-terciario);
+            margin: 0;
+        }
+        .sorteo-active-tag {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .tag-activo {
+            background: rgba(48, 209, 88, 0.15);
+            color: var(--color-primario);
+            border: 1px solid rgba(48, 209, 88, 0.4);
+            box-shadow: 0 0 10px rgba(48, 209, 88, 0.2);
+        }
+        .tag-inactivo {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--color-terciario);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .sorteo-active-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #1C1C1E;
+            padding: 8px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .sorteo-active-selector label {
+            font-size: 0.82rem;
+            color: var(--color-terciario);
+            white-space: nowrap;
+        }
+        .sorteo-active-selector select {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            padding-right: 5px;
+        }
+        .sorteo-active-selector select option {
+            background: #1C1C1E;
+            color: #fff;
+        }
+
         /* Dropdown Menú Gestión */
         .dropdown-gestion {
             position: relative;
@@ -917,6 +1057,31 @@ $todosAdmins = $todosAdmins ?? [];
     <!-- Contenido Principal -->
     <div class="admin-container">
         
+        <!-- Barra del Sorteo Visualizado -->
+        <div class="sorteo-active-bar <?= $sorteoActual['activo'] ? 'is-live' : '' ?>">
+            <div class="sorteo-active-info">
+                <span class="sorteo-active-tag <?= $sorteoActual['activo'] ? 'tag-activo' : 'tag-inactivo' ?>">
+                    <i class="fa-solid <?= $sorteoActual['activo'] ? 'fa-circle-check' : 'fa-circle-pause' ?>"></i>
+                    <?= $sorteoActual['activo'] ? 'SORTEO ACTIVO (PÁGINA PÚBLICA)' : 'SORTEO INACTIVO (HISTORIAL)' ?>
+                </span>
+                <h2><?= htmlspecialchars($sorteoActual['titulo']) ?></h2>
+                <p>
+                    <i class="fa-solid fa-calendar-days"></i> Sorteo: <strong><?= date('d/m/Y', strtotime($sorteoActual['fecha_sorteo'])) ?></strong> a las <strong><?= htmlspecialchars($sorteoActual['hora_sorteo']) ?></strong> &bull;
+                    <i class="fa-solid fa-coins"></i> Precio: <strong style="color:var(--color-primario);">Bs. <?= number_format($sorteoActual['precio_unitario'], 2) ?></strong>
+                </p>
+            </div>
+            <div class="sorteo-active-selector">
+                <label for="selectCambiarSorteo"><i class="fa-solid fa-filter"></i> Sorteo:</label>
+                <select id="selectCambiarSorteo" onchange="if(this.value) window.location.href='dashboard.php?sorteo_id=' + this.value">
+                    <?php foreach ($todosSorteos as $st): ?>
+                        <option value="<?= $st['id'] ?>" <?= $st['id'] == $sorteoActual['id'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($st['titulo']) ?> <?= $st['activo'] ? '★ (Activo)' : '' ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+
         <!-- Tarjetas de Estadísticas -->
         <div class="stats-grid">
             <div class="stat-card recaudado">
@@ -1130,6 +1295,7 @@ $todosAdmins = $todosAdmins ?? [];
                 <h3 style="color:#fff; font-size:1.2rem; margin:0;">Configuración del Sorteo Activo</h3>
             </div>
             <form id="formSorteo" enctype="multipart/form-data">
+                <input type="hidden" name="sorteo_id" value="<?= htmlspecialchars($sorteoActual['id'] ?? '') ?>">
                 <div class="form-group-modal">
                     <label>Título del Premio</label>
                     <input type="text" name="titulo" value="<?= htmlspecialchars($sorteoActual['titulo'] ?? '') ?>" required>
