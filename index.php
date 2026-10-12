@@ -158,6 +158,19 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
             opacity: 0.95;
             transform: scale(1.02);
         }
+        .close-btn-compra {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            color: var(--color-terciario);
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+        .close-btn-compra:hover {
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -267,6 +280,7 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
     <!-- Modal de Confirmación y Éxito -->
     <div id="modalConfirmacion" class="modal-compra-overlay">
         <div class="modal-compra-card">
+            <span class="close-btn-compra" id="cerrarModalCompra" title="Cerrar">&times;</span>
             <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: var(--color-primario);"></i>
             <h2>¡Compra Registrada!</h2>
             <p style="color: var(--color-terciario); font-size: 0.95rem;">
@@ -431,9 +445,7 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
 
                         linkWhatsAppFinal.href = data.whatsapp_url;
                         modalConfirmacion.style.display = 'flex';
-
-                        // Opcional: abrir WhatsApp en nueva pestaña
-                        window.open(data.whatsapp_url, '_blank');
+                        document.body.style.overflow = 'hidden';
                     } else {
                         mostrarAlerta(data.error || 'Ocurrió un error al procesar la compra.', 'error', 'Error en la Compra');
                     }
@@ -442,6 +454,29 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
                 } finally {
                     btnConfirmar.disabled = false;
                     btnConfirmar.innerHTML = 'CONFIRMAR COMPRA';
+                }
+            });
+
+            // Funciones para cerrar modal de compra
+            const btnCerrarCompra = document.getElementById('cerrarModalCompra');
+            function cerrarModalCompra() {
+                modalConfirmacion.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+
+            if (btnCerrarCompra) {
+                btnCerrarCompra.addEventListener('click', cerrarModalCompra);
+            }
+
+            window.addEventListener('click', (e) => {
+                if (e.target === modalConfirmacion) {
+                    cerrarModalCompra();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modalConfirmacion.style.display === 'flex') {
+                    cerrarModalCompra();
                 }
             });
         });
