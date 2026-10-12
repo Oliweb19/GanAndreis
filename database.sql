@@ -70,8 +70,8 @@ CREATE TABLE IF NOT EXISTS `tickets` (
 -- Usuario: admin@ganandreis.com
 -- Clave: admin123
 INSERT INTO `administradores` (`id`, `nombre`, `email`, `password`)
-VALUES (1, 'Administrador GanAndreis', 'admin@ganandreis.com', '$2y$10$vI8aWBnW3fID.ZQ4/zo1G.q1lRps.9cGLcZEiGDMVr5yUP1KUOYTa')
-ON DUPLICATE KEY UPDATE `email` = VALUES(`email`);
+VALUES (1, 'Administrador GanAndreis', 'admin@ganandreis.com', '$2y$10$r3zdjerdg/iotnizktTufOfjOVqHe0y5/coIk7EJHXk3emknerHDq')
+ON DUPLICATE KEY UPDATE `email` = VALUES(`email`), `password` = VALUES(`password`);
 
 -- Sorteo Inicial
 INSERT INTO `sorteos` (`id`, `titulo`, `descripcion`, `fecha_sorteo`, `hora_sorteo`, `precio_unitario`, `imagen`, `activo`)

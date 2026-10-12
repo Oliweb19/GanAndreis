@@ -1,0 +1,8 @@
+# Archivos de entorno y configuración local
+.env
+.DS_Store
+Thumbs.db
+
+# Subidas dinámicas (comprobantes de pago)
+uploads/comprobantes/*
+!uploads/comprobantes/.gitkeep

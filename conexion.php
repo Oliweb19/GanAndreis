@@ -7,7 +7,7 @@
 // Datos de configuración de tu servidor en cPanel
 // NOTA: En cPanel, el nombre de la BD y del usuario suelen tener un prefijo (ej: ganandre_bd, ganandre_user)
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'ganandreis_db');
+define('DB_NAME', 'rifas');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_CHARSET', 'utf8mb4');
