@@ -11,7 +11,22 @@
     <link rel="shortcut icon" href="Assets/img/logo-transparente.png" type="image/x-icon">
     <link href="Assets/icons/fontawesome-free-6.2.1-web/css/all.css" rel="stylesheet">
     <style>
-        .badge.rechazado { background: rgba(255, 69, 58, 0.2); color: #FF453A; border: 1px solid #FF453A; }
+        .badge {
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap !important;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1;
+        }
+        .badge.validado { background: rgba(48, 209, 88, 0.15); color: var(--color-primario); border: 1px solid var(--color-primario); }
+        .badge.pendiente { background: rgba(255, 214, 10, 0.15); color: #FFD60A; border: 1px solid #FFD60A; }
+        .badge.rechazado { background: rgba(255, 69, 58, 0.15); color: #FF453A; border: 1px solid #FF453A; }
         .no-data-msg { text-align: center; padding: 30px; color: var(--color-terciario); font-size: 1.1rem; }
         .loading-spinner { text-align: center; padding: 25px; color: var(--color-primario); font-size: 1.2rem; }
     </style>
