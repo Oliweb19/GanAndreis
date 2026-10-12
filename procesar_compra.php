@@ -151,6 +151,8 @@ if ($pdo) {
 // Preparar URL para WhatsApp
 $numeroEmpresa = "584241733873";
 $ticketsStr = implode(', ', $ticketsGenerados);
+$tasaBCV = obtenerTasaBCV();
+$totalUSD = ($tasaBCV > 0) ? ($totalMonto / $tasaBCV) : 0;
 
 $mensajeWA = "¡Hola! Quiero confirmar mi compra en *GanAndreis* 🍀\n\n"
            . "📋 *Orden:* {$codigoOrden}\n"
@@ -159,7 +161,7 @@ $mensajeWA = "¡Hola! Quiero confirmar mi compra en *GanAndreis* 🍀\n\n"
            . "📞 *Teléfono:* {$codPais} {$telefono}\n"
            . "📧 *Correo:* {$correo}\n\n"
            . "🎟️ *Boletos ({$cantidad}):* {$ticketsStr}\n"
-           . "💰 *Total a Pagar:* Bs. " . number_format($totalMonto, 2) . "\n"
+           . "💰 *Total a Pagar:* Bs. " . number_format($totalMonto, 2) . " (~ $" . number_format($totalUSD, 2) . " USD)\n"
            . "🏦 *Método de Pago:* {$metodo}\n\n"
            . "📎 _Adjunto mi comprobante de pago a continuación:_";
 

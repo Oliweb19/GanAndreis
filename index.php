@@ -62,10 +62,12 @@ if ($pdo) {
     }
 }
 
-// Formateo de fecha
+// Formateo de fecha y tasa BCV
 $timestampFecha = strtotime($sorteo['fecha_sorteo']);
 $fechaFormateada = date('d/m/Y', $timestampFecha);
 $precioUnitario = floatval($sorteo['precio_unitario']);
+$tasaBCV = obtenerTasaBCV();
+$totalDolaresInicial = ($tasaBCV > 0) ? ($precioUnitario / $tasaBCV) : 0;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -85,6 +87,45 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
         .input-error {
             border: 1px solid #FF453A !important;
             box-shadow: 0 0 8px rgba(255, 69, 58, 0.4) !important;
+        }
+        /* Estilos de Conversión a Dólares */
+        .total-price {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .total-price h5 {
+            margin-bottom: 2px;
+            color: var(--color-terciario);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .total-price p {
+            margin: 0;
+            line-height: 1.1;
+        }
+        .conversion-dolares {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-primario);
+            margin-top: 4px;
+            background: rgba(48, 209, 88, 0.12);
+            padding: 3px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(48, 209, 88, 0.3);
+            letter-spacing: 0.3px;
+        }
+        .tasa-bcv-sub {
+            display: block;
+            font-size: 0.72rem;
+            color: var(--color-terciario);
+            margin-top: 3px;
+            font-weight: 500;
         }
         /* Modal de confirmación de compra */
         .modal-compra-overlay {
@@ -221,6 +262,10 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
                     <div class="total-price">
                         <h5>Total a pagar:</h5>
                         <p id="total-monto">Bs. <?= number_format($precioUnitario, 2) ?></p>
+                        <span class="conversion-dolares" id="displayTotalDolares" title="Equivalente en dólares según tasa oficial BCV">
+                            <i class="fa-solid fa-dollar-sign" style="font-size:0.8rem;"></i> <?= number_format($totalDolaresInicial, 2) ?> USD
+                        </span>
+                        <small class="tasa-bcv-sub" id="infoTasaBcv">Tasa BCV: Bs. <?= number_format($tasaBCV, 2) ?></small>
                     </div>
                 </div>
 
@@ -334,6 +379,7 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
     <!-- Pasamos datos de PHP a Javascript -->
     <script>
         const PRECIO_UNITARIO = <?= $precioUnitario ?>;
+        let TASA_BCV = <?= $tasaBCV ?>;
         const DATOS_BANCARIOS = <?= json_encode(array_map(fn($m) => $m['datos'], $metodosPago)) ?>;
     </script>
     <script>
@@ -343,6 +389,7 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
             const btnPlus = document.getElementById('btn-plus');
             const displayCantidad = document.getElementById('cantidad-tickets');
             const displayTotal = document.getElementById('total-monto');
+            const displayTotalDolares = document.getElementById('displayTotalDolares');
             const inputCantidad = document.getElementById('inputCantidad');
 
             let cantidad = 1;
@@ -350,9 +397,30 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
             function actualizarTotal() {
                 displayCantidad.innerText = cantidad;
                 inputCantidad.value = cantidad;
-                const total = (cantidad * PRECIO_UNITARIO).toFixed(2);
-                displayTotal.innerText = `Bs. ${total}`;
+                const totalBs = (cantidad * PRECIO_UNITARIO);
+                const totalUsd = (TASA_BCV > 0) ? (totalBs / TASA_BCV) : 0;
+                displayTotal.innerText = `Bs. ${totalBs.toFixed(2)}`;
+                if (displayTotalDolares) {
+                    displayTotalDolares.innerHTML = `<i class="fa-solid fa-dollar-sign" style="font-size:0.8rem;"></i> ${totalUsd.toFixed(2)} USD`;
+                }
             }
+
+            // Sincronización en vivo con la API oficial del BCV
+            fetch('https://ve.dolarapi.com/v1/dolares/oficial')
+                .then(r => r.json())
+                .then(data => {
+                    if (data && data.promedio && !isNaN(data.promedio)) {
+                        TASA_BCV = parseFloat(data.promedio);
+                        const infoTasa = document.getElementById('infoTasaBcv');
+                        if (infoTasa) {
+                            infoTasa.textContent = `Tasa BCV: Bs. ${TASA_BCV.toFixed(2)}`;
+                        }
+                        actualizarTotal();
+                    }
+                })
+                .catch(() => {
+                    // Mantener la tasa provista por PHP si falla la red externa
+                });
 
             btnPlus.addEventListener('click', () => {
                 cantidad++;
@@ -433,7 +501,8 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
 
                     if (data.success) {
                         resOrden.textContent = data.codigo_orden;
-                        resTotal.textContent = `Bs. ${data.total}`;
+                        const totalUsdModal = (TASA_BCV > 0) ? ((data.cantidad * PRECIO_UNITARIO) / TASA_BCV).toFixed(2) : '0.00';
+                        resTotal.innerHTML = `Bs. ${data.total} <span style="color:#aaa; font-size:0.85rem; font-weight:normal;">(≈ $${totalUsdModal} USD)</span>`;
                         resTicketsBox.innerHTML = '';
                         
                         data.tickets.forEach(ticket => {

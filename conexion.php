@@ -31,3 +31,5 @@ function obtenerConexion() {
     }
     return $pdo;
 }
+
+require_once __DIR__ . '/tasa_bcv.php';
