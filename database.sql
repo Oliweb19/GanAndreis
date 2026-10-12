@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   `creado_el` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   INDEX (`numero_ticket`),
   INDEX (`compra_id`),
+  UNIQUE KEY `uq_sorteo_ticket` (`sorteo_id`, `numero_ticket`),
   FOREIGN KEY (`compra_id`) REFERENCES `compras`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
