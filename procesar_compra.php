@@ -71,7 +71,7 @@ if (isset($_FILES['comprobante']) && $_FILES['comprobante']['error'] === UPLOAD_
 // Generar código de orden único
 $codigoOrden = 'GA-' . strtoupper(substr(uniqid(), -6));
 
-// Generar números de ticket únicos
+// Generar números de ticket únicos de 4 cifras totalmente aleatorios (0000 - 9999)
 $ticketsGenerados = [];
 if ($pdo) {
     // Obtener tickets ya tomados en este sorteo
@@ -80,10 +80,19 @@ if ($pdo) {
     $ocupados = $stmtOcupados->fetchAll(PDO::FETCH_COLUMN);
     $setOcupados = array_flip($ocupados);
 
+    $disponibles = 10000 - count($setOcupados);
+    if ($cantidad > $disponibles && $disponibles >= 0) {
+        echo json_encode([
+            'success' => false,
+            'error' => "Solo quedan {$disponibles} tickets disponibles para este sorteo."
+        ]);
+        exit;
+    }
+
     $intentos = 0;
     while (count($ticketsGenerados) < $cantidad && $intentos < 50000) {
         $intentos++;
-        $numAleatorio = sprintf("#%05d", mt_rand(1, 99999));
+        $numAleatorio = sprintf("#%04d", random_int(0, 9999));
         if (!isset($setOcupados[$numAleatorio]) && !in_array($numAleatorio, $ticketsGenerados)) {
             $ticketsGenerados[] = $numAleatorio;
         }
@@ -92,7 +101,7 @@ if ($pdo) {
 
 // Respaldo de tickets si la base de datos no está activa o se alcanzaron intentos
 while (count($ticketsGenerados) < $cantidad) {
-    $ticketsGenerados[] = sprintf("#%05d", mt_rand(1, 99999));
+    $ticketsGenerados[] = sprintf("#%04d", random_int(0, 9999));
 }
 
 // Guardar en la Base de Datos si la conexión está lista
