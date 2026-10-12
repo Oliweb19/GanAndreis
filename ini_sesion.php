@@ -75,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="Assets/css/index.css">
     <link rel="stylesheet" href="Assets/css/menu_and_footer.css">
     <link rel="stylesheet" href="Assets/css/logeo.css">
+    <link rel="stylesheet" href="Assets/css/modal_alerta.css">
     <link rel="shortcut icon" href="Assets/img/logo-transparente.png" type="image/x-icon">
     <link href="Assets/icons/fontawesome-free-6.2.1-web/css/all.css" rel="stylesheet">
     <style>
@@ -194,5 +195,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </footer>
 
     <script src="Assets/js/ojo_clave.js"></script>
+    <script src="Assets/js/modal_alerta.js"></script>
 </body>
 </html>

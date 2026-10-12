@@ -77,6 +77,7 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
     <link rel="stylesheet" href="Assets/css/index.css">
     <link rel="stylesheet" href="Assets/css/style-index.css">
     <link rel="stylesheet" href="Assets/css/menu_and_footer.css">
+    <link rel="stylesheet" href="Assets/css/modal_alerta.css">
     <link rel="shortcut icon" href="Assets/img/logo-transparente.png" type="image/x-icon">
     <!-- Icons -->
     <link href="Assets/icons/fontawesome-free-6.2.1-web/css/all.css" rel="stylesheet">
@@ -401,6 +402,7 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
                 if (!inputMetodo.value) {
                     contenedorDatos.classList.add('input-error');
                     contenedorDatos.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    mostrarAlerta('Por favor selecciona un método de pago antes de continuar.', 'warning', 'Método Requerido');
                     return;
                 }
 
@@ -433,10 +435,10 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
                         // Opcional: abrir WhatsApp en nueva pestaña
                         window.open(data.whatsapp_url, '_blank');
                     } else {
-                        alert(data.error || 'Ocurrió un error al procesar la compra.');
+                        mostrarAlerta(data.error || 'Ocurrió un error al procesar la compra.', 'error', 'Error en la Compra');
                     }
                 } catch (err) {
-                    alert('Error de conexión con el servidor. Inténtalo nuevamente.');
+                    mostrarAlerta('Error de conexión con el servidor. Inténtalo nuevamente.', 'error', 'Error de Red');
                 } finally {
                     btnConfirmar.disabled = false;
                     btnConfirmar.innerHTML = 'CONFIRMAR COMPRA';
@@ -444,5 +446,6 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
             });
         });
     </script>
+    <script src="Assets/js/modal_alerta.js"></script>
 </body>
 </html>

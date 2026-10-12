@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="Assets/css/index.css">
     <link rel="stylesheet" href="Assets/css/menu_and_footer.css">
     <link rel="stylesheet" href="Assets/css/ticket.css">
+    <link rel="stylesheet" href="Assets/css/modal_alerta.css">
     <link rel="shortcut icon" href="Assets/img/logo-transparente.png" type="image/x-icon">
     <link href="Assets/icons/fontawesome-free-6.2.1-web/css/all.css" rel="stylesheet">
     <style>
@@ -129,7 +130,10 @@
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const cedula = cedulaInput.value.trim();
-                if (!cedula) return;
+                if (!cedula) {
+                    mostrarAlerta('Por favor ingresa tu número de cédula para consultar tus boletos.', 'warning', 'Cédula Requerida');
+                    return;
+                }
 
                 btnBuscar.disabled = true;
                 btnBuscar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Buscando...';
@@ -177,7 +181,7 @@
 
                     modal.style.display = 'flex';
                 } catch (err) {
-                    alert('Ocurrió un error al consultar tus tickets. Por favor intenta de nuevo.');
+                    mostrarAlerta('Ocurrió un error al consultar tus tickets. Por favor intenta de nuevo.', 'error', 'Error al Consultar');
                 } finally {
                     btnBuscar.disabled = false;
                     btnBuscar.innerHTML = '<i class="fa-solid fa-search"></i> BUSCAR AHORA';
@@ -197,5 +201,6 @@
             });
         });
     </script>
+    <script src="Assets/js/modal_alerta.js"></script>
 </body>
 </html>

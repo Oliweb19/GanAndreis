@@ -64,8 +64,9 @@ if ($pdo) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Administrativo | GanAndreis</title>
     <link rel="stylesheet" href="../Assets/css/index.css">
-    <link rel="stylesheet" href="../Assets/icons/fontawesome-free-6.2.1-web/css/all.css">
+    <link rel="stylesheet" href="../Assets/css/modal_alerta.css">
     <link rel="shortcut icon" href="../Assets/img/logo-transparente.png" type="image/x-icon">
+    <link rel="stylesheet" href="../Assets/icons/fontawesome-free-6.2.1-web/css/all.css">
     <style>
         :root {
             --sidebar-width: 260px;
@@ -735,7 +736,14 @@ if ($pdo) {
                     const compraId = btn.getAttribute('data-id');
                     const nuevoEstado = btn.getAttribute('data-nuevo');
                     
-                    if (!confirm(`¿Estás seguro de marcar esta orden como "${nuevoEstado.toUpperCase()}"?`)) {
+                    const seguro = await mostrarConfirmacion(
+                        `¿Estás seguro de marcar esta orden como "${nuevoEstado.toUpperCase()}"?`,
+                        'Confirmar Cambio de Estado',
+                        'Sí, Cambiar',
+                        'Cancelar'
+                    );
+
+                    if (!seguro) {
                         return;
                     }
 
@@ -763,12 +771,12 @@ if ($pdo) {
                             if (tr) {
                                 tr.setAttribute('data-estado', nuevoEstado);
                             }
-                            alert('Estado actualizado correctamente.');
+                            mostrarAlerta(`Estado de la orden actualizado a ${nuevoEstado.toUpperCase()}.`, 'success', 'Actualizado');
                         } else {
-                            alert(data.error || 'Error al actualizar estado.');
+                            mostrarAlerta(data.error || 'Error al actualizar estado.', 'error', 'Error');
                         }
                     } catch (err) {
-                        alert('Error de conexión al actualizar.');
+                        mostrarAlerta('Error de conexión al actualizar el estado.', 'error', 'Error de Red');
                     } finally {
                         btn.disabled = false;
                     }
@@ -799,17 +807,18 @@ if ($pdo) {
                     });
                     const data = await res.json();
                     if (data.success) {
-                        alert('¡Sorteo actualizado con éxito!');
+                        await mostrarAlerta('¡Los datos del sorteo se guardaron correctamente!', 'success', 'Sorteo Actualizado');
                         location.reload();
                     } else {
-                        alert(data.error || 'Error al actualizar el sorteo.');
+                        mostrarAlerta(data.error || 'Error al actualizar el sorteo.', 'error', 'Error');
                     }
                 } catch (err) {
-                    alert('Error de red al actualizar sorteo.');
+                    mostrarAlerta('Error de red al actualizar sorteo.', 'error', 'Error de Red');
                 }
             });
 
         });
     </script>
+    <script src="../Assets/js/modal_alerta.js"></script>
 </body>
 </html>
