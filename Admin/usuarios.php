@@ -367,6 +367,95 @@ if ($pdo) {
             align-items: center;
             gap: 5px;
         }
+
+        /* ========================================================
+           RESPONSIVE DESIGN (TABLETS & SMARTPHONES)
+           ======================================================== */
+        @media (max-width: 850px) {
+            .container {
+                margin: 20px auto;
+                padding: 0 16px;
+            }
+            .layout-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-nav {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px 16px;
+                gap: 12px;
+            }
+            .admin-logo {
+                justify-content: space-between;
+                width: 100%;
+            }
+            .admin-logo img {
+                height: 34px;
+            }
+            .admin-logo h2 {
+                font-size: 1.15rem;
+            }
+            .admin-nav-user {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 8px;
+                width: 100%;
+            }
+            .btn-nav, .btn-logout {
+                padding: 7px 12px;
+                font-size: 0.8rem;
+                flex: 1 1 auto;
+                justify-content: center;
+            }
+            .dropdown-menu-gestion {
+                right: auto;
+                left: 0;
+                min-width: 240px;
+            }
+
+            .page-header {
+                margin-bottom: 20px;
+            }
+            .page-header h1 {
+                font-size: 1.35rem;
+            }
+
+            .card {
+                padding: 18px 15px;
+                border-radius: 16px;
+            }
+            .form-group input {
+                font-size: 16px; /* Evita zoom automático en iOS */
+            }
+            .table-responsive {
+                -webkit-overflow-scrolling: touch;
+            }
+            .admin-table {
+                min-width: 460px;
+            }
+            .admin-table th, .admin-table td {
+                padding: 10px 12px;
+                font-size: 0.84rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+            .card {
+                padding: 16px 12px;
+            }
+            .btn-submit-main {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>

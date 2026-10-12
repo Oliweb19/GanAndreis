@@ -1006,6 +1006,242 @@ $todosAdmins = $todosAdmins ?? [];
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             color: #fff;
         }
+
+        /* ========================================================
+           RESPONSIVE DESIGN (TABLETS & SMARTPHONES)
+           ======================================================== */
+        @media (max-width: 1024px) {
+            .admin-container {
+                padding: 20px 16px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-nav {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px 16px;
+                gap: 12px;
+            }
+            .admin-logo {
+                justify-content: space-between;
+                width: 100%;
+            }
+            .admin-logo img {
+                height: 34px;
+            }
+            .admin-logo h2 {
+                font-size: 1.15rem;
+            }
+            .admin-nav-user {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 8px;
+                width: 100%;
+            }
+            .admin-nav-user .btn-config,
+            .admin-nav-user .btn-logout,
+            .admin-nav-user .user-pill {
+                padding: 7px 12px;
+                font-size: 0.8rem;
+            }
+            .admin-nav-user .btn-config {
+                flex: 1 1 auto;
+                justify-content: center;
+            }
+            .admin-nav-user .user-pill {
+                display: none; /* Ocultar píldora en pantallas pequeñas para liberar espacio */
+            }
+            .dropdown-menu-gestion {
+                right: auto;
+                left: 0;
+                min-width: 240px;
+            }
+
+            /* Barra del sorteo activo */
+            .sorteo-active-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 14px;
+                padding: 16px 14px;
+            }
+            .sorteo-active-info h2 {
+                font-size: 1.25rem;
+            }
+            .sorteo-active-selector {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .sorteo-active-selector select {
+                flex: 1;
+                width: 100%;
+                max-width: none;
+            }
+
+            /* Tarjetas de estadísticas en 2 columnas compactas */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-bottom: 22px;
+            }
+            .stat-card {
+                padding: 15px 12px;
+                border-radius: 16px;
+            }
+            .stat-card h4 {
+                font-size: 0.72rem;
+                margin-bottom: 4px;
+            }
+            .stat-value {
+                font-size: 1.25rem;
+            }
+            .stat-icon {
+                font-size: 1.6rem;
+                right: 10px;
+                top: 10px;
+            }
+
+            /* Controles y Filtros */
+            .controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                margin-bottom: 18px;
+            }
+            .filter-tabs {
+                display: flex;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                width: 100%;
+                gap: 6px;
+                padding-bottom: 4px;
+                scrollbar-width: none;
+            }
+            .filter-tabs::-webkit-scrollbar {
+                display: none;
+            }
+            .filter-btn {
+                flex: 0 0 auto;
+                padding: 8px 14px;
+                font-size: 0.82rem;
+                border-radius: 10px;
+            }
+            .search-and-refresh {
+                width: 100%;
+            }
+            .search-box {
+                flex: 1;
+            }
+            .search-box input {
+                font-size: 0.88rem;
+                padding: 10px 12px 10px 38px;
+            }
+
+            /* Tabla de órdenes */
+            .table-responsive {
+                border-radius: 16px;
+                margin-bottom: 20px;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+                -webkit-overflow-scrolling: touch;
+            }
+            .orders-table {
+                min-width: 860px; /* Asegura scroll táctil suave sin comprimir columnas */
+            }
+            .orders-table th,
+            .orders-table td {
+                padding: 12px 10px;
+                font-size: 0.85rem;
+            }
+            .action-btns .btn-action {
+                width: 36px;
+                height: 36px;
+                font-size: 0.95rem;
+            }
+
+            /* Paginador */
+            .table-pagination {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+                padding: 14px 12px;
+                text-align: center;
+            }
+            .pagination-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 6px;
+            }
+            .btn-pag {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            .btn-page-num {
+                min-width: 32px;
+                height: 32px;
+                font-size: 0.8rem;
+            }
+
+            /* Modales responsivos para móviles */
+            .modal-receipt-box {
+                width: 95% !important;
+                max-width: 95% !important;
+                max-height: 90vh;
+                overflow-y: auto;
+                padding: 18px 14px !important;
+                border-radius: 16px;
+            }
+            .modal-receipt-img {
+                max-height: 55vh;
+            }
+            .form-group-modal input,
+            .form-group-modal textarea {
+                font-size: 16px; /* Evita auto-zoom en iOS Safari */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-container {
+                padding: 15px 10px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .stat-card {
+                padding: 12px 10px;
+            }
+            .stat-value {
+                font-size: 1.15rem;
+            }
+            .stat-card h4 {
+                font-size: 0.68rem;
+            }
+            .sorteo-active-info h2 {
+                font-size: 1.15rem;
+            }
+            .sorteo-active-info p {
+                font-size: 0.8rem;
+            }
+            .sorteo-active-tag {
+                font-size: 0.7rem;
+                padding: 3px 8px;
+            }
+            .modal-boletos-grid {
+                max-height: 220px;
+                gap: 6px;
+                padding: 12px;
+            }
+            .modal-ticket-tag {
+                font-size: 0.92rem;
+                padding: 5px 10px;
+            }
+        }
     </style>
 </head>
 <body>

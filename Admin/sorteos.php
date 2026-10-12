@@ -499,6 +499,117 @@ if ($pdo) {
             transform: scale(1.04);
             box-shadow: 0 0 20px rgba(48, 209, 88, 0.4);
         }
+
+        /* ========================================================
+           RESPONSIVE DESIGN (TABLETS & SMARTPHONES)
+           ======================================================== */
+        @media (max-width: 900px) {
+            .container {
+                margin: 20px auto;
+                padding: 0 16px;
+            }
+            .sorteos-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-nav {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px 16px;
+                gap: 12px;
+            }
+            .admin-logo {
+                justify-content: space-between;
+                width: 100%;
+            }
+            .admin-logo img {
+                height: 34px;
+            }
+            .admin-logo h2 {
+                font-size: 1.15rem;
+            }
+            .admin-nav-user {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 8px;
+                width: 100%;
+            }
+            .btn-nav, .btn-logout {
+                padding: 7px 12px;
+                font-size: 0.8rem;
+                flex: 1 1 auto;
+                justify-content: center;
+            }
+            .dropdown-menu-gestion {
+                right: auto;
+                left: 0;
+                min-width: 240px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+            .page-header h1 {
+                font-size: 1.35rem;
+            }
+
+            .card {
+                padding: 18px 15px;
+                border-radius: 16px;
+            }
+            .form-group input,
+            .form-group textarea {
+                font-size: 16px; /* Evita zoom automático en Safari */
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 0 10px;
+            }
+            .sorteo-card {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 16px 14px;
+                gap: 14px;
+            }
+            .sorteo-thumb {
+                width: 100%;
+                height: 160px;
+                border-radius: 12px;
+            }
+            .sorteo-info h4 {
+                font-size: 1.05rem;
+            }
+            .sorteo-actions {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+                padding-top: 12px;
+                margin-top: 4px;
+            }
+            .btn-activar {
+                padding: 9px 16px;
+                font-size: 0.84rem;
+            }
+            .badge-activo, .badge-inactivo {
+                font-size: 0.78rem;
+                padding: 5px 10px;
+            }
+            .btn-submit-main {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
