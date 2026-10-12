@@ -884,20 +884,20 @@ $todosAdmins = $todosAdmins ?? [];
                     <i class="fa-solid fa-layer-group"></i> Gestión <i class="fa-solid fa-chevron-down flecha-dropdown"></i>
                 </button>
                 <div class="dropdown-menu-gestion" id="menuGestion">
-                    <button type="button" class="dropdown-item-btn" id="btnAbrirGestionSorteos">
+                    <a href="sorteos.php" class="dropdown-item-btn">
                         <i class="fa-solid fa-ticket-simple"></i>
                         <div>
                             <strong>Sorteos</strong>
                             <small>Activar o crear sorteos</small>
                         </div>
-                    </button>
-                    <button type="button" class="dropdown-item-btn" id="btnAbrirGestionUsuarios">
+                    </a>
+                    <a href="usuarios.php" class="dropdown-item-btn">
                         <i class="fa-solid fa-user-shield"></i>
                         <div>
                             <strong>Usuarios</strong>
                             <small>Crear usuario administrador</small>
                         </div>
-                    </button>
+                    </a>
                 </div>
             </div>
 
@@ -1172,167 +1172,8 @@ $todosAdmins = $todosAdmins ?? [];
                 </div>
                 <button type="submit" class="btn-config" style="width:100%; justify-content:center; background:var(--color-primario); color:#000; font-weight:800; margin-top:10px;">
                     <i class="fa-solid fa-floppy-disk"></i> GUARDAR CAMBIOS
-    <!-- Modal Gestión de Sorteos (Activar/Crear Sorteos) -->
-    <div id="modalGestionSorteos" class="modal-receipt">
-        <div class="modal-receipt-box" style="max-width: 680px; text-align: left;">
-            <span class="close-modal-btn" id="cerrarGestionSorteos">&times;</span>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:14px; flex-wrap:wrap; gap:10px;">
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <div style="width:40px; height:40px; border-radius:10px; background:rgba(48,209,88,0.15); color:var(--color-primario); display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;">
-                        <i class="fa-solid fa-ticket-simple"></i>
-                    </div>
-                    <div>
-                        <h3 style="color:#fff; font-size:1.2rem; margin:0;">Gestión de Sorteos</h3>
-                        <p style="color:var(--color-terciario); font-size:0.8rem; margin:2px 0 0 0;">Activa un sorteo inactivo o registra un nuevo sorteo</p>
-                    </div>
-                </div>
-                <button type="button" class="btn-config" id="btnToggleNuevoSorteo" style="background:rgba(48,209,88,0.15); color:var(--color-primario); border-color:var(--color-primario); font-size:0.85rem; padding:7px 14px;">
-                    <i class="fa-solid fa-plus"></i> Registrar Nuevo Sorteo
-                </button>
-            </div>
-
-            <!-- Formulario Desplegable para Registrar Nuevo Sorteo -->
-            <div id="contenedorNuevoSorteo" style="display:none; background:#141416; border:1px solid rgba(48,209,88,0.3); border-radius:14px; padding:18px; margin-bottom:18px;">
-                <h4 style="color:var(--color-primario); margin:0 0 12px 0; font-size:1rem; display:flex; align-items:center; gap:8px;">
-                    <i class="fa-solid fa-circle-plus"></i> Nuevo Sorteo
-                </h4>
-                <form id="formNuevoSorteo" enctype="multipart/form-data">
-                    <div class="form-group-modal">
-                        <label>Título del Sorteo / Premio</label>
-                        <input type="text" name="titulo" placeholder="Ej: Gran Rifa Moto Keeway" required>
-                    </div>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
-                        <div class="form-group-modal">
-                            <label>Precio por Boleto (Bs.)</label>
-                            <input type="number" step="0.01" name="precio_unitario" value="500.00" required>
-                        </div>
-                        <div class="form-group-modal">
-                            <label>Fecha del Sorteo</label>
-                            <input type="date" name="fecha_sorteo" required>
-                        </div>
-                    </div>
-                    <div class="form-group-modal">
-                        <label>Hora del Sorteo</label>
-                        <input type="text" name="hora_sorteo" value="08:00 PM" required>
-                    </div>
-                    <div class="form-group-modal">
-                        <label>Descripción</label>
-                        <textarea name="descripcion" rows="2" placeholder="Detalles de las condiciones, números y premios"></textarea>
-                    </div>
-                    <div class="form-group-modal">
-                        <label>Imagen del Sorteo</label>
-                        <input type="file" name="imagen" accept="image/*" style="font-size:0.85rem;">
-                    </div>
-                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px;">
-                        <input type="checkbox" name="activo" id="checkActivarNuevo" value="1" checked style="width:auto; cursor:pointer;">
-                        <label for="checkActivarNuevo" style="margin:0; font-size:0.85rem; color:#fff; cursor:pointer;">
-                            Activar este sorteo inmediatamente como el sorteo en curso
-                        </label>
-                    </div>
-                    <div style="display:flex; gap:10px;">
-                        <button type="submit" class="btn-config" id="btnGuardarNuevoSorteo" style="background:var(--color-primario); color:#000; font-weight:700;">
-                            <i class="fa-solid fa-floppy-disk"></i> Guardar Sorteo
-                        </button>
-                        <button type="button" class="btn-config" id="btnCancelarNuevoSorteo" style="background:#262628;">
-                            Cancelar
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Listado de Sorteos Registrados -->
-            <div class="sorteos-grid-list" id="listaSorteosContainer">
-                <?php if (empty($todosSorteos)): ?>
-                    <p style="color:var(--color-terciario); text-align:center; padding:20px;">No hay sorteos registrados.</p>
-                <?php else: ?>
-                    <?php foreach ($todosSorteos as $sort): ?>
-                        <div class="sorteo-card-item <?= $sort['activo'] ? 'is-active' : '' ?>">
-                            <img src="<?= !empty($sort['imagen']) ? '../' . htmlspecialchars($sort['imagen']) : '../Assets/img/Prueba.jpg' ?>" class="sorteo-item-thumb" alt="Miniatura">
-                            <div class="sorteo-item-info">
-                                <h4><?= htmlspecialchars($sort['titulo']) ?></h4>
-                                <p>
-                                    <i class="fa-solid fa-calendar"></i> <?= htmlspecialchars($sort['fecha_formateada']) ?> &bull; 
-                                    <strong style="color:var(--color-primario);">Bs. <?= number_format($sort['precio_unitario'], 2) ?></strong>
-                                </p>
-                            </div>
-                            <div class="sorteo-item-status">
-                                <?php if ($sort['activo']): ?>
-                                    <span class="badge-sorteo-activo">
-                                        <i class="fa-solid fa-circle-check"></i> Activo
-                                    </span>
-                                <?php else: ?>
-                                    <button type="button" class="btn-activar-sorteo btn-accion-activar" data-id="<?= $sort['id'] ?>" data-titulo="<?= htmlspecialchars($sort['titulo']) ?>">
-                                        <i class="fa-solid fa-power-off"></i> Activar
-                                    </button>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Gestión de Usuarios (Crear Administrador) -->
-    <div id="modalGestionUsuarios" class="modal-receipt">
-        <div class="modal-receipt-box" style="max-width: 620px; text-align: left;">
-            <span class="close-modal-btn" id="cerrarGestionUsuarios">&times;</span>
-            <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:14px;">
-                <div style="width:40px; height:40px; border-radius:10px; background:rgba(48,209,88,0.15); color:var(--color-primario); display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;">
-                    <i class="fa-solid fa-user-shield"></i>
-                </div>
-                <div>
-                    <h3 style="color:#fff; font-size:1.2rem; margin:0;">Gestión de Administradores</h3>
-                    <p style="color:var(--color-terciario); font-size:0.8rem; margin:2px 0 0 0;">Crea nuevas credenciales de acceso al panel de control</p>
-                </div>
-            </div>
-
-            <!-- Formulario Crear Administrador -->
-            <form id="formCrearAdmin" style="background:#141416; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:18px; margin-bottom:20px;">
-                <h4 style="color:#fff; margin:0 0 12px 0; font-size:0.95rem; display:flex; align-items:center; gap:8px;">
-                    <i class="fa-solid fa-user-plus" style="color:var(--color-primario);"></i> Registrar Nuevo Administrador
-                </h4>
-                <div class="form-group-modal">
-                    <label>Nombre Completo</label>
-                    <input type="text" name="nombre" placeholder="Ej: Carlos Pérez" required>
-                </div>
-                <div class="form-group-modal">
-                    <label>Correo Electrónico (Usuario)</label>
-                    <input type="email" name="email" placeholder="carlos@ganandreis.com" required>
-                </div>
-                <div class="form-group-modal">
-                    <label>Contraseña de Acceso (mínimo 6 caracteres)</label>
-                    <input type="password" name="password" placeholder="••••••••" minlength="6" required>
-                </div>
-                <button type="submit" class="btn-config" id="btnSubmitCrearAdmin" style="width:100%; justify-content:center; background:var(--color-primario); color:#000; font-weight:800; margin-top:6px;">
-                    <i class="fa-solid fa-plus"></i> CREAR ADMINISTRADOR
                 </button>
             </form>
-
-            <!-- Lista de Administradores Existentes -->
-            <h4 style="color:var(--color-terciario); font-size:0.85rem; text-transform:uppercase; margin:0 0 10px 0;">
-                Administradores Activos (<?= count($todosAdmins) ?>)
-            </h4>
-            <div style="max-height:180px; overflow-y:auto; border:1px solid rgba(255,255,255,0.06); border-radius:10px;">
-                <table class="admins-table">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Correo</th>
-                            <th>Registrado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($todosAdmins as $adm): ?>
-                            <tr>
-                                <td><strong style="color:#fff;"><?= htmlspecialchars($adm['nombre']) ?></strong></td>
-                                <td><small style="color:var(--color-terciario);"><?= htmlspecialchars($adm['email']) ?></small></td>
-                                <td><small><?= htmlspecialchars($adm['fecha_creado']) ?></small></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div>
 
@@ -1646,174 +1487,11 @@ $todosAdmins = $todosAdmins ?? [];
             // 6. Menú Desplegable Gestión
             const dropdownGestion = document.getElementById('dropdownGestion');
             const btnTriggerGestion = document.getElementById('btnTriggerGestion');
-            const btnAbrirGestionSorteos = document.getElementById('btnAbrirGestionSorteos');
-            const btnAbrirGestionUsuarios = document.getElementById('btnAbrirGestionUsuarios');
 
             if (btnTriggerGestion && dropdownGestion) {
                 btnTriggerGestion.addEventListener('click', (e) => {
                     e.stopPropagation();
                     dropdownGestion.classList.toggle('open');
-                });
-            }
-
-            // 7. Modal Gestión de Sorteos
-            const modalGestionSorteos = document.getElementById('modalGestionSorteos');
-            const cerrarGestionSorteos = document.getElementById('cerrarGestionSorteos');
-            const btnToggleNuevoSorteo = document.getElementById('btnToggleNuevoSorteo');
-            const btnCancelarNuevoSorteo = document.getElementById('btnCancelarNuevoSorteo');
-            const contenedorNuevoSorteo = document.getElementById('contenedorNuevoSorteo');
-            const formNuevoSorteo = document.getElementById('formNuevoSorteo');
-
-            function abrirModalGestionSorteos() {
-                if (dropdownGestion) dropdownGestion.classList.remove('open');
-                modalGestionSorteos.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-            }
-
-            function cerrarModalGestionSorteos() {
-                modalGestionSorteos.style.display = 'none';
-                document.body.style.overflow = '';
-            }
-
-            if (btnAbrirGestionSorteos) btnAbrirGestionSorteos.addEventListener('click', abrirModalGestionSorteos);
-            if (cerrarGestionSorteos) cerrarGestionSorteos.addEventListener('click', cerrarModalGestionSorteos);
-
-            if (btnToggleNuevoSorteo && contenedorNuevoSorteo) {
-                btnToggleNuevoSorteo.addEventListener('click', () => {
-                    const visible = contenedorNuevoSorteo.style.display === 'block';
-                    contenedorNuevoSorteo.style.display = visible ? 'none' : 'block';
-                });
-            }
-
-            if (btnCancelarNuevoSorteo && contenedorNuevoSorteo) {
-                btnCancelarNuevoSorteo.addEventListener('click', () => {
-                    contenedorNuevoSorteo.style.display = 'none';
-                    if (formNuevoSorteo) formNuevoSorteo.reset();
-                });
-            }
-
-            // Guardar Nuevo Sorteo
-            if (formNuevoSorteo) {
-                formNuevoSorteo.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const formData = new FormData(formNuevoSorteo);
-                    formData.append('accion', 'crear_sorteo');
-
-                    const btnSubmit = document.getElementById('btnGuardarNuevoSorteo');
-                    if (btnSubmit) {
-                        btnSubmit.disabled = true;
-                        btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
-                    }
-
-                    try {
-                        const res = await fetch('acciones.php', {
-                            method: 'POST',
-                            body: formData
-                        });
-                        const data = await res.json();
-                        if (data.success) {
-                            await mostrarAlerta(data.mensaje || '¡Sorteo registrado con éxito!', 'success', 'Sorteo Creado');
-                            location.reload();
-                        } else {
-                            mostrarAlerta(data.error || 'No se pudo crear el sorteo.', 'error', 'Error');
-                        }
-                    } catch (err) {
-                        mostrarAlerta('Error de conexión al guardar el sorteo.', 'error', 'Error de Red');
-                    } finally {
-                        if (btnSubmit) {
-                            btnSubmit.disabled = false;
-                            btnSubmit.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Guardar Sorteo';
-                        }
-                    }
-                });
-            }
-
-            // Activar un sorteo desactivado
-            document.querySelectorAll('.btn-accion-activar').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    const sorteoId = btn.getAttribute('data-id');
-                    const titulo = btn.getAttribute('data-titulo') || 'este sorteo';
-
-                    btn.disabled = true;
-                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-
-                    const formData = new FormData();
-                    formData.append('accion', 'activar_sorteo');
-                    formData.append('sorteo_id', sorteoId);
-
-                    try {
-                        const res = await fetch('acciones.php', {
-                            method: 'POST',
-                            body: formData
-                        });
-                        const data = await res.json();
-                        if (data.success) {
-                            await mostrarAlerta(`¡El sorteo "${titulo}" ahora está ACTIVO en la página principal!`, 'success', 'Sorteo Activado');
-                            location.reload();
-                        } else {
-                            mostrarAlerta(data.error || 'Error al activar el sorteo.', 'error', 'Error');
-                            btn.disabled = false;
-                            btn.innerHTML = '<i class="fa-solid fa-power-off"></i> Activar';
-                        }
-                    } catch (err) {
-                        mostrarAlerta('Error de red al activar el sorteo.', 'error', 'Error de Red');
-                        btn.disabled = false;
-                        btn.innerHTML = '<i class="fa-solid fa-power-off"></i> Activar';
-                    }
-                });
-            });
-
-            // 8. Modal Gestión de Usuarios Administradores
-            const modalGestionUsuarios = document.getElementById('modalGestionUsuarios');
-            const cerrarGestionUsuarios = document.getElementById('cerrarGestionUsuarios');
-            const formCrearAdmin = document.getElementById('formCrearAdmin');
-            const btnSubmitCrearAdmin = document.getElementById('btnSubmitCrearAdmin');
-
-            function abrirModalGestionUsuarios() {
-                if (dropdownGestion) dropdownGestion.classList.remove('open');
-                modalGestionUsuarios.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-            }
-
-            function cerrarModalGestionUsuarios() {
-                modalGestionUsuarios.style.display = 'none';
-                document.body.style.overflow = '';
-            }
-
-            if (btnAbrirGestionUsuarios) btnAbrirGestionUsuarios.addEventListener('click', abrirModalGestionUsuarios);
-            if (cerrarGestionUsuarios) cerrarGestionUsuarios.addEventListener('click', cerrarModalGestionUsuarios);
-
-            if (formCrearAdmin) {
-                formCrearAdmin.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const formData = new FormData(formCrearAdmin);
-                    formData.append('accion', 'crear_administrador');
-
-                    if (btnSubmitCrearAdmin) {
-                        btnSubmitCrearAdmin.disabled = true;
-                        btnSubmitCrearAdmin.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creando...';
-                    }
-
-                    try {
-                        const res = await fetch('acciones.php', {
-                            method: 'POST',
-                            body: formData
-                        });
-                        const data = await res.json();
-                        if (data.success) {
-                            await mostrarAlerta('¡El nuevo usuario administrador ha sido creado correctamente!', 'success', 'Usuario Creado');
-                            location.reload();
-                        } else {
-                            mostrarAlerta(data.error || 'Error al crear el administrador.', 'error', 'Error');
-                        }
-                    } catch (err) {
-                        mostrarAlerta('Error de conexión al registrar el administrador.', 'error', 'Error de Red');
-                    } finally {
-                        if (btnSubmitCrearAdmin) {
-                            btnSubmitCrearAdmin.disabled = false;
-                            btnSubmitCrearAdmin.innerHTML = '<i class="fa-solid fa-plus"></i> CREAR ADMINISTRADOR';
-                        }
-                    }
                 });
             }
 
@@ -1825,8 +1503,6 @@ $todosAdmins = $todosAdmins ?? [];
                 if (e.target === modalReceipt) ocultarModalReceipt();
                 if (e.target === modalSorteo) cerrarModalSorteo();
                 if (e.target === modalBoletos) ocultarModalBoletos();
-                if (e.target === modalGestionSorteos) cerrarModalGestionSorteos();
-                if (e.target === modalGestionUsuarios) cerrarModalGestionUsuarios();
             });
 
             document.addEventListener('keydown', (e) => {
@@ -1835,8 +1511,6 @@ $todosAdmins = $todosAdmins ?? [];
                     if (modalReceipt && modalReceipt.style.display === 'flex') ocultarModalReceipt();
                     if (modalSorteo && modalSorteo.style.display === 'flex') cerrarModalSorteo();
                     if (modalBoletos && modalBoletos.style.display === 'flex') ocultarModalBoletos();
-                    if (modalGestionSorteos && modalGestionSorteos.style.display === 'flex') cerrarModalGestionSorteos();
-                    if (modalGestionUsuarios && modalGestionUsuarios.style.display === 'flex') cerrarModalGestionUsuarios();
                 }
             });
 
