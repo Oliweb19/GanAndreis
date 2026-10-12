@@ -194,7 +194,7 @@
                         `;
                     }
 
-                    modal.style.display = 'flex';
+                    abrirModal();
                 } catch (err) {
                     mostrarAlerta('Ocurrió un error al consultar tus tickets. Por favor intenta de nuevo.', 'error', 'Error al Consultar');
                 } finally {
@@ -203,15 +203,30 @@
                 }
             });
 
-            // Cerrar Modal con la X
-            closeBtn.addEventListener('click', () => {
+            function abrirModal() {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+
+            function cerrarModal() {
                 modal.style.display = 'none';
-            });
+                document.body.style.overflow = '';
+            }
+
+            // Cerrar Modal con la X
+            closeBtn.addEventListener('click', cerrarModal);
 
             // Cerrar Modal clicando fuera de la caja
             window.addEventListener('click', (e) => {
                 if (e.target === modal) {
-                    modal.style.display = 'none';
+                    cerrarModal();
+                }
+            });
+
+            // Cerrar Modal con tecla Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.style.display === 'flex') {
+                    cerrarModal();
                 }
             });
         });

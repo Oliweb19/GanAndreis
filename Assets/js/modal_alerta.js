@@ -70,6 +70,7 @@
             function cerrar() {
                 overlay.classList.remove('active');
                 document.removeEventListener('keydown', onKeyDown);
+                document.body.style.overflow = '';
                 if (typeof onCerrar === 'function') {
                     onCerrar();
                 }
@@ -88,6 +89,7 @@
 
             // Mostrar con animación
             requestAnimationFrame(() => {
+                document.body.style.overflow = 'hidden';
                 overlay.classList.add('active');
                 btnOk.focus();
             });
@@ -128,6 +130,7 @@
             function finalizar(resultado) {
                 overlay.classList.remove('active');
                 document.removeEventListener('keydown', onKeyDown);
+                document.body.style.overflow = '';
                 resolve(resultado);
             }
 
@@ -142,6 +145,7 @@
             document.addEventListener('keydown', onKeyDown);
 
             requestAnimationFrame(() => {
+                document.body.style.overflow = 'hidden';
                 overlay.classList.add('active');
                 document.getElementById('ganandreis-modal-btn-confirm').focus();
             });
