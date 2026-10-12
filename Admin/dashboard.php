@@ -331,18 +331,29 @@ if ($pdo) {
 
         /* Tickets pill */
         .tickets-pill {
-            background: rgba(48, 209, 88, 0.1);
+            background: rgba(48, 209, 88, 0.12);
             color: var(--color-primario);
-            border: 1px dashed rgba(48, 209, 88, 0.4);
-            padding: 4px 10px;
-            border-radius: 8px;
+            border: 1px dashed rgba(48, 209, 88, 0.45);
+            padding: 5px 12px;
+            border-radius: 9px;
             font-weight: 700;
-            font-size: 0.85rem;
-            display: inline-block;
+            font-size: 0.82rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
             max-width: 250px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .tickets-pill:hover {
+            background: rgba(48, 209, 88, 0.25);
+            border: 1px solid var(--color-primario);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(48, 209, 88, 0.25);
         }
 
         /* Botones de acción */
@@ -464,6 +475,147 @@ if ($pdo) {
             outline: none;
             font-size: 0.95rem;
         }
+
+        /* Buscador con Botón de Reinicio */
+        .search-and-refresh {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-refresh {
+            background: #1C1C1E;
+            color: var(--color-terciario);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .btn-refresh:hover {
+            color: var(--color-primario);
+            border-color: var(--color-primario);
+            background: rgba(48, 209, 88, 0.1);
+            transform: rotate(45deg);
+        }
+        .btn-refresh.spinning i {
+            animation: fa-spin 0.8s linear infinite;
+        }
+
+        /* Paginador de la Tabla */
+        .table-pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: #1C1C1E;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .pagination-info {
+            font-size: 0.85rem;
+            color: var(--color-terciario);
+        }
+        .pagination-info strong {
+            color: #fff;
+        }
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-pag {
+            background: #262628;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-pag:hover:not(:disabled) {
+            background: var(--color-primario);
+            color: #000;
+            border-color: var(--color-primario);
+        }
+        .btn-pag:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+        .pagination-pages {
+            display: flex;
+            gap: 5px;
+        }
+        .btn-page-num {
+            background: #262628;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            min-width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-page-num:hover {
+            background: rgba(48, 209, 88, 0.2);
+            color: var(--color-primario);
+            border-color: var(--color-primario);
+        }
+        .btn-page-num.active {
+            background: var(--color-primario);
+            color: #000;
+            border-color: var(--color-primario);
+            font-weight: 800;
+        }
+
+        /* Modal de Boletos del Cliente */
+        .modal-boletos-grid {
+            background: #141416;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+        .modal-boletos-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+        .modal-boletos-grid::-webkit-scrollbar-thumb {
+            background: rgba(48, 209, 88, 0.35);
+            border-radius: 6px;
+        }
+        .modal-ticket-tag {
+            background: rgba(48, 209, 88, 0.15);
+            color: var(--color-primario);
+            border: 1px solid rgba(48, 209, 88, 0.4);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-family: monospace;
+            font-size: 1.05rem;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(48, 209, 88, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -528,9 +680,14 @@ if ($pdo) {
                 <button class="filter-btn" data-filter="rechazado">Rechazados</button>
             </div>
 
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="buscadorAdmin" placeholder="Buscar por cédula, nombre u orden...">
+            <div class="search-and-refresh">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="buscadorAdmin" placeholder="Buscar por cédula, nombre, orden o #ticket...">
+                </div>
+                <button type="button" id="btnRecargarDashboard" class="btn-refresh" title="Recargar y comprobar nuevos tickets">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </button>
             </div>
         </div>
 
@@ -564,7 +721,7 @@ if ($pdo) {
                                     $tlfLimpio = preg_replace('/[^0-9]/', '', $c['cod_pais'] . $c['telefono']);
                                     $msgWAAprobado = urlencode("¡Hola {$c['nombre_completo']}! 🍀 Tu compra de boletos para el sorteo de GanAndreis ha sido VALIDADA con éxito.\n\n🎟️ Tus Boletos: {$c['lista_tickets']}\n📋 Orden: {$c['codigo_orden']}\n\n¡Mucha suerte en el sorteo!");
                                 ?>
-                                <tr class="fila-compra" data-estado="<?= htmlspecialchars($c['estado']) ?>" data-search="<?= strtolower(htmlspecialchars($c['codigo_orden'] . ' ' . $c['cedula'] . ' ' . $c['nombre_completo'] . ' ' . $c['telefono'])) ?>">
+                                <tr class="fila-compra" data-estado="<?= htmlspecialchars($c['estado']) ?>" data-search="<?= strtolower(htmlspecialchars($c['codigo_orden'] . ' ' . $c['cedula'] . ' ' . $c['nombre_completo'] . ' ' . $c['telefono'] . ' ' . $c['lista_tickets'])) ?>">
                                     <td>
                                         <strong style="color:var(--color-primario); font-family: monospace; font-size:1rem;"><?= htmlspecialchars($c['codigo_orden']) ?></strong><br>
                                         <small style="color:var(--color-terciario); font-size:0.75rem;"><?= htmlspecialchars($c['fecha_formateada']) ?></small>
@@ -578,8 +735,15 @@ if ($pdo) {
                                         <small><?= htmlspecialchars($c['cod_pais'] . ' ' . $c['telefono']) ?></small>
                                     </td>
                                     <td>
-                                        <div class="tickets-pill" title="<?= htmlspecialchars($c['lista_tickets']) ?>">
-                                            <?= htmlspecialchars($c['cantidad_tickets']) ?> boletos: <?= htmlspecialchars($c['lista_tickets']) ?>
+                                        <div class="tickets-pill btn-ver-boletos" 
+                                             data-orden="<?= htmlspecialchars($c['codigo_orden']) ?>"
+                                             data-cliente="<?= htmlspecialchars($c['nombre_completo']) ?>"
+                                             data-cedula="<?= htmlspecialchars($c['cedula']) ?>"
+                                             data-tickets="<?= htmlspecialchars($c['lista_tickets'] ?? '') ?>"
+                                             data-cantidad="<?= htmlspecialchars($c['cantidad_tickets']) ?>"
+                                             title="Haz clic para ver todos los boletos asignados">
+                                            <i class="fa-solid fa-ticket"></i>
+                                            <span><?= htmlspecialchars($c['cantidad_tickets']) ?> boletos: <?= htmlspecialchars($c['lista_tickets']) ?></span>
                                         </div>
                                     </td>
                                     <td>
@@ -597,7 +761,7 @@ if ($pdo) {
                                     </td>
                                     <td>
                                         <span class="status-badge <?= htmlspecialchars($c['estado']) ?>" id="badge-<?= $c['id'] ?>">
-                                            <?= htmlspecialchars($c['estado']) ?>
+                                             <?= htmlspecialchars($c['estado']) ?>
                                         </span>
                                     </td>
                                     <td>
@@ -619,8 +783,53 @@ if ($pdo) {
                     </tbody>
                 </table>
             </div>
+
+            <!-- Paginador -->
+            <div class="table-pagination" id="paginacionCompras">
+                <div class="pagination-info" id="paginacionInfo">
+                    Mostrando <strong id="pagDesde">0</strong> - <strong id="pagHasta">0</strong> de <strong id="pagTotal">0</strong> compras
+                </div>
+                <div class="pagination-controls">
+                    <button type="button" class="btn-pag" id="btnPagAnterior" disabled>
+                        <i class="fa-solid fa-chevron-left"></i> Anterior
+                    </button>
+                    <div class="pagination-pages" id="paginacionNumeros"></div>
+                    <button type="button" class="btn-pag" id="btnPagSiguiente" disabled>
+                        Siguiente <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
         </div>
 
+    </div>
+
+    <!-- Modal Visor de Boletos del Cliente -->
+    <div id="modalBoletosCliente" class="modal-receipt">
+        <div class="modal-receipt-box" style="max-width: 580px; text-align: left;">
+            <span class="close-modal-btn" id="cerrarModalBoletos">&times;</span>
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:15px;">
+                <div style="width:48px; height:48px; border-radius:12px; background:rgba(48,209,88,0.15); color:var(--color-primario); display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0;">
+                    <i class="fa-solid fa-ticket"></i>
+                </div>
+                <div style="overflow:hidden;">
+                    <h3 style="color:#fff; font-size:1.25rem; margin:0;" id="modalBoletosTitulo">Boletos de la Orden</h3>
+                    <p style="color:var(--color-terciario); font-size:0.85rem; margin:4px 0 0 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" id="modalBoletosSubtitulo"></p>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <span style="font-size:0.88rem; color:var(--color-terciario);">
+                    Total Asignados: <strong id="modalBoletosCount" style="color:var(--color-primario);"></strong>
+                </span>
+                <button type="button" id="btnCopiarBoletos" class="btn-config" style="padding:6px 14px; font-size:0.8rem; cursor:pointer;">
+                    <i class="fa-regular fa-copy"></i> Copiar Números
+                </button>
+            </div>
+
+            <div class="modal-boletos-grid" id="modalBoletosGrid">
+                <!-- Se inyectan las píldoras de tickets -->
+            </div>
+        </div>
     </div>
 
     <!-- Modal Visor de Comprobante -->
@@ -672,40 +881,192 @@ if ($pdo) {
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Filtrado por Estado (Tabs)
-            const filterBtns = document.querySelectorAll('.filter-btn');
-            const filas = document.querySelectorAll('.fila-compra');
+            // 1. Filtrado, Búsqueda y Paginación Unificada
+            let filtroActual = 'todos';
+            let queryActual = '';
+            let paginaActual = 1;
+            const FILAS_POR_PAGINA = 10;
 
+            const filas = Array.from(document.querySelectorAll('.fila-compra'));
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const buscador = document.getElementById('buscadorAdmin');
+            const btnRecargar = document.getElementById('btnRecargarDashboard');
+
+            const pagDesde = document.getElementById('pagDesde');
+            const pagHasta = document.getElementById('pagHasta');
+            const pagTotal = document.getElementById('pagTotal');
+            const btnPagAnterior = document.getElementById('btnPagAnterior');
+            const btnPagSiguiente = document.getElementById('btnPagSiguiente');
+            const paginacionNumeros = document.getElementById('paginacionNumeros');
+
+            function actualizarTabla(resetPagina = false) {
+                if (resetPagina) paginaActual = 1;
+
+                const filasVisibles = filas.filter(fila => {
+                    const filaEstado = fila.getAttribute('data-estado');
+                    const coincideEstado = (filtroActual === 'todos' || filaEstado === filtroActual);
+                    const searchData = (fila.getAttribute('data-search') || '');
+                    const coincideQuery = !queryActual || searchData.includes(queryActual);
+                    return coincideEstado && coincideQuery;
+                });
+
+                const total = filasVisibles.length;
+                const totalPaginas = Math.ceil(total / FILAS_POR_PAGINA) || 1;
+                if (paginaActual > totalPaginas) paginaActual = totalPaginas;
+
+                // Ocultar todas las filas
+                filas.forEach(f => f.style.display = 'none');
+
+                // Mostrar solo las correspondientes a la página actual
+                const inicio = (paginaActual - 1) * FILAS_POR_PAGINA;
+                const fin = inicio + FILAS_POR_PAGINA;
+                const filasPagina = filasVisibles.slice(inicio, fin);
+                filasPagina.forEach(f => f.style.display = '');
+
+                // Actualizar contadores
+                if (total === 0) {
+                    pagDesde.textContent = '0';
+                    pagHasta.textContent = '0';
+                    pagTotal.textContent = '0';
+                } else {
+                    pagDesde.textContent = inicio + 1;
+                    pagHasta.textContent = Math.min(fin, total);
+                    pagTotal.textContent = total;
+                }
+
+                // Habilitar / Deshabilitar botones de paginación
+                btnPagAnterior.disabled = (paginaActual <= 1);
+                btnPagSiguiente.disabled = (paginaActual >= totalPaginas);
+
+                // Generar botones numéricos
+                paginacionNumeros.innerHTML = '';
+                for (let i = 1; i <= totalPaginas; i++) {
+                    if (totalPaginas > 7 && Math.abs(i - paginaActual) > 2 && i !== 1 && i !== totalPaginas) {
+                        if (i === 2 || i === totalPaginas - 1) {
+                            const dots = document.createElement('span');
+                            dots.textContent = '...';
+                            dots.style.color = 'var(--color-terciario)';
+                            dots.style.padding = '0 4px';
+                            paginacionNumeros.appendChild(dots);
+                        }
+                        continue;
+                    }
+                    const btnNum = document.createElement('button');
+                    btnNum.type = 'button';
+                    btnNum.className = `btn-page-num ${i === paginaActual ? 'active' : ''}`;
+                    btnNum.textContent = i;
+                    btnNum.addEventListener('click', () => {
+                        paginaActual = i;
+                        actualizarTabla();
+                    });
+                    paginacionNumeros.appendChild(btnNum);
+                }
+            }
+
+            btnPagAnterior.addEventListener('click', () => {
+                if (paginaActual > 1) {
+                    paginaActual--;
+                    actualizarTabla();
+                }
+            });
+
+            btnPagSiguiente.addEventListener('click', () => {
+                paginaActual++;
+                actualizarTabla();
+            });
+
+            // Tabs de Filtros
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     filterBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    const estado = btn.getAttribute('data-filter');
+                    filtroActual = btn.getAttribute('data-filter');
+                    actualizarTabla(true);
+                });
+            });
 
-                    filas.forEach(fila => {
-                        const filaEstado = fila.getAttribute('data-estado');
-                        if (estado === 'todos' || filaEstado === estado) {
-                            fila.style.display = '';
-                        } else {
-                            fila.style.display = 'none';
-                        }
+            // Buscador en Vivo (soporta cédula, nombre, orden y boletos)
+            buscador.addEventListener('input', (e) => {
+                queryActual = e.target.value.toLowerCase().trim();
+                actualizarTabla(true);
+            });
+
+            // Botón de Reinicio / Recarga
+            if (btnRecargar) {
+                btnRecargar.addEventListener('click', () => {
+                    btnRecargar.classList.add('spinning');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 300);
+                });
+            }
+
+            // Inicializar tabla con paginación
+            actualizarTabla();
+
+            // 2. Modal de Boletos del Cliente
+            const modalBoletos = document.getElementById('modalBoletosCliente');
+            const cerrarModalBoletos = document.getElementById('cerrarModalBoletos');
+            const modalBoletosTitulo = document.getElementById('modalBoletosTitulo');
+            const modalBoletosSubtitulo = document.getElementById('modalBoletosSubtitulo');
+            const modalBoletosCount = document.getElementById('modalBoletosCount');
+            const modalBoletosGrid = document.getElementById('modalBoletosGrid');
+            const btnCopiarBoletos = document.getElementById('btnCopiarBoletos');
+            let boletosTextoActual = '';
+
+            document.querySelectorAll('.btn-ver-boletos').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const orden = btn.getAttribute('data-orden') || '';
+                    const cliente = btn.getAttribute('data-cliente') || '';
+                    const cedula = btn.getAttribute('data-cedula') || '';
+                    const ticketsStr = btn.getAttribute('data-tickets') || '';
+                    const cantidad = btn.getAttribute('data-cantidad') || '0';
+
+                    boletosTextoActual = ticketsStr;
+                    modalBoletosTitulo.textContent = `Boletos - Orden ${orden}`;
+                    modalBoletosSubtitulo.textContent = `Cliente: ${cliente} | C.I: ${cedula}`;
+                    modalBoletosCount.textContent = `${cantidad} boleto(s)`;
+
+                    modalBoletosGrid.innerHTML = '';
+                    const ticketsArray = ticketsStr.split(',').map(t => t.trim()).filter(Boolean);
+
+                    if (ticketsArray.length > 0) {
+                        ticketsArray.forEach(num => {
+                            const tag = document.createElement('div');
+                            tag.className = 'modal-ticket-tag';
+                            tag.innerHTML = `<i class="fa-solid fa-ticket" style="font-size:0.75rem; margin-right:7px; opacity:0.8;"></i> ${num}`;
+                            modalBoletosGrid.appendChild(tag);
+                        });
+                    } else {
+                        modalBoletosGrid.innerHTML = '<span style="color:var(--color-terciario); font-size:0.9rem;">Sin boletos asignados</span>';
+                    }
+
+                    modalBoletos.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            function ocultarModalBoletos() {
+                modalBoletos.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+
+            if (cerrarModalBoletos) {
+                cerrarModalBoletos.addEventListener('click', ocultarModalBoletos);
+            }
+
+            if (btnCopiarBoletos) {
+                btnCopiarBoletos.addEventListener('click', () => {
+                    if (!boletosTextoActual) return;
+                    navigator.clipboard.writeText(boletosTextoActual).then(() => {
+                        const origHTML = btnCopiarBoletos.innerHTML;
+                        btnCopiarBoletos.innerHTML = '<i class="fa-solid fa-check" style="color:var(--color-primario);"></i> ¡Copiado!';
+                        setTimeout(() => {
+                            btnCopiarBoletos.innerHTML = origHTML;
+                        }, 2000);
                     });
                 });
-            });
-
-            // 2. Buscador en Vivo
-            const buscador = document.getElementById('buscadorAdmin');
-            buscador.addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase().trim();
-                filas.forEach(fila => {
-                    const searchData = fila.getAttribute('data-search') || '';
-                    if (searchData.includes(query)) {
-                        fila.style.display = '';
-                    } else {
-                        fila.style.display = 'none';
-                    }
-                });
-            });
+            }
 
             // 3. Modal Visor de Comprobantes
             const modalReceipt = document.getElementById('modalReceipt');
@@ -722,13 +1083,16 @@ if ($pdo) {
                     receiptLinkDescarga.href = src;
                     receiptTitulo.textContent = `Comprobante - Orden ${orden}`;
                     modalReceipt.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
                 });
             });
 
-            cerrarReceipt.addEventListener('click', () => modalReceipt.style.display = 'none');
-            window.addEventListener('click', (e) => {
-                if (e.target === modalReceipt) modalReceipt.style.display = 'none';
-            });
+            function ocultarModalReceipt() {
+                modalReceipt.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+
+            cerrarReceipt.addEventListener('click', ocultarModalReceipt);
 
             // 4. Cambiar Estado de Compra (Validar / Rechazar con AJAX)
             document.querySelectorAll('.btn-cambiar-estado').forEach(btn => {
@@ -789,10 +1153,32 @@ if ($pdo) {
             const cerrarSorteo = document.getElementById('cerrarSorteo');
             const formSorteo = document.getElementById('formSorteo');
 
-            btnAbrirSorteo.addEventListener('click', () => modalSorteo.style.display = 'flex');
-            cerrarSorteo.addEventListener('click', () => modalSorteo.style.display = 'none');
+            function abrirModalSorteo() {
+                modalSorteo.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+
+            function cerrarModalSorteo() {
+                modalSorteo.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+
+            btnAbrirSorteo.addEventListener('click', abrirModalSorteo);
+            cerrarSorteo.addEventListener('click', cerrarModalSorteo);
+
+            // Cierre global con click afuera y tecla Escape
             window.addEventListener('click', (e) => {
-                if (e.target === modalSorteo) modalSorteo.style.display = 'none';
+                if (e.target === modalReceipt) ocultarModalReceipt();
+                if (e.target === modalSorteo) cerrarModalSorteo();
+                if (e.target === modalBoletos) ocultarModalBoletos();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (modalReceipt.style.display === 'flex') ocultarModalReceipt();
+                    if (modalSorteo.style.display === 'flex') cerrarModalSorteo();
+                    if (modalBoletos.style.display === 'flex') ocultarModalBoletos();
+                }
             });
 
             formSorteo.addEventListener('submit', async (e) => {
