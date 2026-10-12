@@ -38,8 +38,8 @@ if ($accion === 'cambiar_estado') {
         $stmtCompra->execute([$nuevoEstado, $compraId]);
 
         // Actualizar tickets asociados
-        $stmtTickets = $pdo->prepare("UPDATE tickets SET estado = ? WHERE id_compra = ? OR compra_id = ?");
-        $stmtTickets->execute([$nuevoEstado, $compraId, $compraId]);
+        $stmtTickets = $pdo->prepare("UPDATE tickets SET estado = ? WHERE compra_id = ?");
+        $stmtTickets->execute([$nuevoEstado, $compraId]);
 
         $pdo->commit();
         echo json_encode(['success' => true, 'mensaje' => 'Estado actualizado a ' . $nuevoEstado]);
