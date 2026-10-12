@@ -1,0 +1,264 @@
+/*--- Main Container ---*/
+.cont-main {
+    width: 90%; 
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 140px 0 50px 0; /* Padding top alto para esquivar el menú */
+    display: flex;
+    align-items: flex-start; 
+    justify-content: center;
+    gap: 40px; 
+    flex-wrap: wrap; /* Permite que las cajas bajen en pantallas chicas */
+}
+
+/*--- Estilos Generales de Cajas (Glassmorphism) ---*/
+.box-rifa, .box-ticket {
+    background: linear-gradient(
+        135deg, 
+        rgba(44, 44, 46, 0.8), 
+        rgba(28, 28, 30, 0.95)
+    );
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 30px;
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    padding: 30px;
+    color: var(--blanco);
+    
+    /* Flexibilidad */
+    flex: 1; 
+    min-width: 350px; /* Ancho mínimo antes de saltar de línea */
+}
+
+/*--- Caja Izquierda (Premio) ---*/
+.box-rifa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    /* Sticky: Se queda fija al bajar en Desktop */
+    position: sticky;
+    top: 120px; 
+}
+
+.box-rifa img {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(48, 209, 88, 0.2);
+}
+
+.box-rifa h2 {
+    color: var(--color-primario);
+    font-size: 1.8rem;
+    margin-top: 10px;
+}
+
+.box-fecha {
+    display: flex;
+    gap: 15px;
+    font-size: 0.9rem;
+    color: var(--color-terciario);
+}
+
+/*--- Caja Derecha (Ticket) ---*/
+.box-ticket {
+    flex: 1.5; /* Ocupa más espacio que la rifa */
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.ticket-header h1 {
+    font-size: 1.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+}
+
+/* Contador de Tickets */
+.box-cantidad-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255,255,255,0.05);
+    padding: 15px 25px;
+    border-radius: 20px;
+}
+
+.box-cantidad {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.box-cantidad button {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-primario);
+    color: var(--negro);
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.total-price p {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--blanco);
+}
+
+/* Inputs (Grid 2x2) */
+.grid-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-ticket input, .form-ticket select {
+    width: 100%;
+    height: 50px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 0 15px;
+    color: var(--blanco);
+    outline: none;
+    transition: border 0.3s;
+}
+
+.form-ticket input:focus {
+    border-color: var(--color-primario);
+}
+
+.tlf-group {
+    display: flex;
+    gap: 5px;
+}
+.tlf-group select { width: 90px; }
+
+/* Métodos de Pago */
+.opciones-pago {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap; /* Para que bajen en movil si no caben */
+}
+
+.pago-item {
+    cursor: pointer;
+    padding: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 80px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.pago-item.active {
+    border-color: var(--color-primario);
+    background: rgba(48, 209, 88, 0.1);
+}
+
+.pago-item i { font-size: 1.5rem; color: var(--color-terciario); }
+.pago-item.active i { color: var(--color-primario); }
+
+.datos-pago-container {
+    background: rgba(0,0,0,0.4);
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    border: 1px dashed rgba(255,255,255,0.1);
+}
+
+/* Upload y Botón */
+.box-comprobante {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+input[type="file"] { display: none; }
+
+.custom-file-upload {
+    border: 1px solid var(--color-primario);
+    color: var(--color-primario);
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.custom-file-upload:hover {
+    background: var(--color-primario);
+    color: var(--negro);
+}
+
+.btn-confirmar {
+    width: 100%;
+    height: 55px;
+    margin-top: 15px;
+    background: var(--color-primario);
+    border: none;
+    border-radius: 15px;
+    color: var(--negro);
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(48, 209, 88, 0.3);
+    transition: transform 0.2s;
+}
+
+.btn-confirmar:hover { transform: scale(1.02); }
+
+/* Errores */
+.input-error {
+    border: 1px solid #FF3B30 !important;
+    box-shadow: 0 0 10px rgba(255, 59, 48, 0.4);
+    animation: shake 0.3s ease-in-out;
+}
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+/*------------------------------------------*/
+/* RESPONSIVE (Adaptación Móvil)      */
+/*------------------------------------------*/
+
+@media (max-width: 850px) {
+    .cont-main {
+        flex-direction: column; /* Cajas una debajo de la otra */
+        align-items: center;
+        padding-top: 110px;
+    }
+
+    .box-rifa {
+        position: static; /* Ya no es sticky en móvil */
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .box-ticket {
+        width: 100%;
+        min-width: unset; /* Quita restricción de ancho */
+    }
+
+    .grid-inputs {
+        grid-template-columns: 1fr; /* Inputs uno debajo del otro */
+    }
+}

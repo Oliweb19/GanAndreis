@@ -1,0 +1,244 @@
+/*--- Contenedor Principal (Tarjeta de Vidrio) ---*/
+.cont-log {
+    width: 90%;
+    max-width: 1000px;
+    min-height: 580px;
+    margin: 140px auto 50px auto;
+    
+    background: linear-gradient(
+        135deg, 
+        rgba(44, 44, 46, 0.8), 
+        rgba(28, 28, 30, 0.95)
+    );
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    
+    border-radius: 30px; 
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    
+    display: flex;
+    overflow: hidden;
+}
+
+/*--- Lado Izquierdo (Formulario) ---*/
+.box-form {
+    flex: 1;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.header-form {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header-form h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    color: var(--blanco);
+    font-weight: 700;
+}
+
+.header-form p {
+    color: var(--color-terciario);
+    font-size: 0.95rem;
+}
+
+/*--- Inputs y Etiquetas ---*/
+.box-form form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.input-group label {
+    font-size: 0.9rem;
+    color: var(--color-terciario);
+    margin-left: 5px;
+    font-weight: 500;
+}
+
+.box-form input {
+    width: 100%;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0 15px;
+    color: var(--blanco);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.box-form input:focus {
+    border-color: var(--color-primario);
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 10px rgba(48, 209, 88, 0.1);
+}
+
+/*--- Icono del Ojo ---*/
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-container input {
+    padding-right: 45px;
+}
+
+.password-container i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--color-terciario);
+    font-size: 1.1rem;
+    z-index: 10;
+}
+
+/*--- Botones y Links ---*/
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -5px;
+}
+
+.actions a {
+    color: var(--color-primario);
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+
+.actions a:hover { text-decoration: underline; }
+
+.btn-login {
+    width: 100%;
+    height: 55px;
+    background: var(--color-primario);
+    border: none;
+    border-radius: 12px;
+    color: var(--negro);
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 5px 15px rgba(48, 209, 88, 0.2);
+    transition: transform 0.2s;
+}
+
+.btn-login:hover { transform: scale(1.02); }
+
+/*--- Redes Sociales ---*/
+.social-login {
+    margin-top: 35px;
+    text-align: center;
+}
+
+.social-login p {
+    color: var(--color-terciario);
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.social-login p::before, .social-login p::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 20%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+.social-login p::before { left: 0; }
+.social-login p::after { right: 0; }
+
+.box-social {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.box-social a {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    color: var(--blanco);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+}
+
+.box-social a:hover {
+    background: var(--color-primario);
+    color: var(--negro);
+    transform: translateY(-3px);
+}
+
+/*--- Lado Derecho (Branding Admin) ---*/
+.box-redireccion {
+    flex: 0.8;
+    background: linear-gradient(135deg, rgba(15,15,15,0.9), #000);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.overlay-content h1 {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    color: var(--blanco);
+    font-weight: 700;
+}
+
+.overlay-content p {
+    color: var(--color-terciario);
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+/*------------------------------------------*/
+/* RESPONSIVE (Adaptación Móvil)      */
+/*------------------------------------------*/
+
+@media (max-width: 900px) {
+    .cont-log {
+        flex-direction: column-reverse; /* Formulario arriba, Branding abajo */
+        height: auto;
+        margin-top: 110px;
+        width: 95%;
+    }
+    
+    .box-redireccion {
+        padding: 40px 20px;
+        border-left: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .box-form {
+        padding: 30px 20px;
+    }
+
+    .header-form h1 {
+        font-size: 1.8rem;
+    }
+}

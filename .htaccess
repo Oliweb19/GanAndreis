@@ -1,0 +1,15 @@
+# Configuración para cPanel / Apache
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirigir accesos antiguos a las versiones PHP
+    RewriteRule ^index\.html$ index.php [R=301,L]
+    RewriteRule ^validar_ticket\.html$ validar_ticket.php [R=301,L]
+    RewriteRule ^ini_sesion\.html$ ini_sesion.php [R=301,L]
+    RewriteRule ^Admin/dashboard\.html$ Admin/dashboard.php [R=301,L]
+</IfModule>
+
+# Deshabilitar listado de directorios
+Options -Indexes

@@ -1,0 +1,209 @@
+/*--- Header (Menú Flotante Centrado) ---*/
+.box-menu {
+    width: 80%; 
+    height: 80px; 
+    background: linear-gradient(
+        135deg, 
+        rgba(44, 44, 46, 0.8), 
+        rgba(28, 28, 30, 0.9)
+    );
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 50px; 
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed; 
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+/* Sección Izquierda (Opciones) */
+.box-menu-opciones {
+    padding: 0 20px;
+    background: transparent;
+}
+
+.box-menu-opciones ul {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.box-menu-opciones ul li a {
+    color: var(--blanco);
+    font-size: 16px;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.box-menu-opciones ul li a:hover {
+    color: var(--color-primario);
+}
+
+/* Sección Central (Logo) */
+.box-menu-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box-menu-logo img {
+    width: 60px;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+    transition: width 0.3s ease;
+}
+
+/* Sección Derecha (Botones) */
+.box-derecha ul {
+    display: flex;
+    gap: 15px;
+}
+
+.box-derecha ul li button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+#regi {
+    background-color: var(--color-primario);
+    color: var(--negro);
+}
+
+#regi:hover {
+    box-shadow: 0 0 15px rgba(48, 209, 88, 0.4);
+}
+
+.box-menu-botones{
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.box-menu-botones a {
+    padding: 10px 20px;
+    background-color: var(--color-primario);
+    color: var(--negro); /* El texto sobre el verde suele ser negro para legibilidad */
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 8px; /* Bordes un poco más rectos como los botones de iOS */
+    transition: all 0.3s ease;
+}
+#ini {
+    background-color: transparent;
+    color: var(--color-primario);
+    border: 1px solid var(--color-primario);
+}
+#ini:hover{
+    background-color: var(--color-primario);
+    color: var(--fondo);
+}
+
+/*--- Footer ---*/
+.cont-footer {
+    width: 100%;
+    min-height: 150px; /* Altura flexible */
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    background: var(--input-busqueda);
+    padding: 40px 20px;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+.box-empresa, .box-sociales {
+    max-width: 400px;
+    width: 100%;
+}
+
+.box-empresa h1, .box-sociales h1 {
+    color: var(--color-primario);
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.box-empresa p {
+    color: var(--color-terciario);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.box-sociales ul li {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    color: var(--blanco);
+}
+
+.box-sociales ul li i {
+    color: var(--color-primario);
+    font-size: 1.2rem;
+}
+
+.cont-copy {
+    width: 100%;
+    padding: 20px;
+    background: #000;
+    text-align: center;
+    color: var(--color-terciario);
+    font-size: 0.85rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/*------------------------------------------*/
+/* RESPONSIVE (Adaptación Móvil)      */
+/*------------------------------------------*/
+
+@media (max-width: 900px) {
+    /* Ajuste Menú Tablet/Móvil */
+    .box-menu {
+        width: 95%;
+        height: 70px;
+        padding: 0 10px;
+        top: 10px;
+    }
+    
+    .box-menu-logo img {
+        width: 45px;
+    }
+
+    /* Ocultar texto de los enlaces, dejar solo íconos */
+    .box-menu-opciones ul { gap: 15px; }
+    .box-menu-opciones ul li a { font-size: 0; }
+    .box-menu-opciones ul li a i { font-size: 1.3rem; }
+
+    /* Botones más compactos */
+    .box-derecha ul li button {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    /* Footer en Columna */
+    .cont-footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .box-sociales ul li {
+        justify-content: center;
+    }
+}
