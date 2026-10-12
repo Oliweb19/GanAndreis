@@ -159,7 +159,7 @@ $mensajeWA = "¡Hola! Quiero confirmar mi compra en *GanAndreis* 🍀\n\n"
            . "📞 *Teléfono:* {$codPais} {$telefono}\n"
            . "📧 *Correo:* {$correo}\n\n"
            . "🎟️ *Boletos ({$cantidad}):* {$ticketsStr}\n"
-           . "💰 *Total a Pagar:* $" . number_format($totalMonto, 2) . "\n"
+           . "💰 *Total a Pagar:* Bs. " . number_format($totalMonto, 2) . "\n"
            . "🏦 *Método de Pago:* {$metodo}\n\n"
            . "📎 _Adjunto mi comprobante de pago a continuación:_";
 

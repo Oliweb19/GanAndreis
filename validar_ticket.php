@@ -178,7 +178,7 @@
                                 <td><strong style="color: var(--color-primario); font-size:1.1rem;">${ticket.numero_ticket}</strong></td>
                                 <td>${ticket.sorteo_titulo}</td>
                                 <td>${ticket.fecha_compra}</td>
-                                <td>$${parseFloat(ticket.monto).toFixed(2)}</td>
+                                <td>Bs. ${parseFloat(ticket.monto).toFixed(2)}</td>
                                 <td><span class="badge ${estadoClass}">${estadoTexto}</span></td>
                             `;
                             tablaCuerpo.appendChild(tr);

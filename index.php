@@ -220,7 +220,7 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
                     </div>
                     <div class="total-price">
                         <h5>Total a pagar:</h5>
-                        <p id="total-monto">$<?= number_format($precioUnitario, 2) ?></p>
+                        <p id="total-monto">Bs. <?= number_format($precioUnitario, 2) ?></p>
                     </div>
                 </div>
 
@@ -351,7 +351,7 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
                 displayCantidad.innerText = cantidad;
                 inputCantidad.value = cantidad;
                 const total = (cantidad * PRECIO_UNITARIO).toFixed(2);
-                displayTotal.innerText = `$${total}`;
+                displayTotal.innerText = `Bs. ${total}`;
             }
 
             btnPlus.addEventListener('click', () => {
@@ -433,7 +433,7 @@ $precioUnitario = floatval($sorteo['precio_unitario']);
 
                     if (data.success) {
                         resOrden.textContent = data.codigo_orden;
-                        resTotal.textContent = `$${data.total}`;
+                        resTotal.textContent = `Bs. ${data.total}`;
                         resTicketsBox.innerHTML = '';
                         
                         data.tickets.forEach(ticket => {

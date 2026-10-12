@@ -476,6 +476,50 @@ if ($pdo) {
             font-size: 0.95rem;
         }
 
+        /* Uploader de Imagen de Sorteo */
+        .sorteo-image-uploader {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 5px;
+        }
+        .preview-container {
+            width: 90px;
+            height: 90px;
+            border-radius: 12px;
+            border: 2px dashed rgba(48, 209, 88, 0.4);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #141416;
+            flex-shrink: 0;
+        }
+        #previewImgSorteo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .btn-subir-imagen {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #262628;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+        .btn-subir-imagen:hover {
+            background: var(--color-primario);
+            color: #000;
+            border-color: var(--color-primario);
+        }
+
         /* Buscador con Botón de Reinicio */
         .search-and-refresh {
             display: flex;
@@ -649,7 +693,7 @@ if ($pdo) {
             <div class="stat-card recaudado">
                 <i class="fa-solid fa-dollar-sign stat-icon"></i>
                 <h4>Total Recaudado (Aprobado)</h4>
-                <div class="stat-value">$<?= number_format($totalRecaudado, 2) ?></div>
+                <div class="stat-value">Bs. <?= number_format($totalRecaudado, 2) ?></div>
             </div>
 
             <div class="stat-card">
@@ -747,7 +791,7 @@ if ($pdo) {
                                         </div>
                                     </td>
                                     <td>
-                                        <strong style="color:#fff;">$<?= number_format($c['total_monto'], 2) ?></strong><br>
+                                        <strong style="color:#fff;">Bs. <?= number_format($c['total_monto'], 2) ?></strong><br>
                                         <small style="color:var(--color-terciario); text-transform:capitalize;"><?= htmlspecialchars($c['metodo_pago']) ?></small>
                                     </td>
                                     <td>
@@ -848,17 +892,42 @@ if ($pdo) {
 
     <!-- Modal Configuración Sorteo -->
     <div id="modalSorteo" class="modal-receipt">
-        <div class="modal-receipt-box" style="max-width: 500px;">
+        <div class="modal-receipt-box" style="max-width: 540px; text-align: left;">
             <span class="close-modal-btn" id="cerrarSorteo">&times;</span>
-            <h3 style="color:var(--color-primario); margin-bottom:20px;">Configuración del Sorteo Activo</h3>
-            <form id="formSorteo">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:14px;">
+                <div style="width:40px; height:40px; border-radius:10px; background:rgba(48,209,88,0.15); color:var(--color-primario); display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;">
+                    <i class="fa-solid fa-gear"></i>
+                </div>
+                <h3 style="color:#fff; font-size:1.2rem; margin:0;">Configuración del Sorteo Activo</h3>
+            </div>
+            <form id="formSorteo" enctype="multipart/form-data">
                 <div class="form-group-modal">
                     <label>Título del Premio</label>
                     <input type="text" name="titulo" value="<?= htmlspecialchars($sorteoActual['titulo'] ?? '') ?>" required>
                 </div>
+
                 <div class="form-group-modal">
-                    <label>Precio por Boleto ($)</label>
-                    <input type="number" step="0.01" name="precio_unitario" value="<?= htmlspecialchars($sorteoActual['precio_unitario'] ?? '3.50') ?>" required>
+                    <label>Imagen del Premio / Sorteo</label>
+                    <div class="sorteo-image-uploader">
+                        <div class="preview-container">
+                            <?php 
+                                $imgActual = !empty($sorteoActual['imagen']) ? '../' . $sorteoActual['imagen'] : '../Assets/img/Prueba.jpg';
+                            ?>
+                            <img src="<?= htmlspecialchars($imgActual) ?>" id="previewImgSorteo" alt="Vista previa del sorteo">
+                        </div>
+                        <div>
+                            <label for="inputImgSorteo" class="btn-subir-imagen">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Seleccionar Imagen
+                            </label>
+                            <input type="file" id="inputImgSorteo" name="imagen" accept="image/*" style="display:none;">
+                            <p style="font-size:0.75rem; color:var(--color-terciario); margin-top:6px;">Formatos: JPG, PNG, WEBP. Vista previa instantánea.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group-modal">
+                    <label>Precio por Boleto (Bs.)</label>
+                    <input type="number" step="0.01" name="precio_unitario" value="<?= htmlspecialchars($sorteoActual['precio_unitario'] ?? '10.00') ?>" required>
                 </div>
                 <div class="form-group-modal">
                     <label>Fecha del Sorteo</label>
@@ -1165,6 +1234,26 @@ if ($pdo) {
 
             btnAbrirSorteo.addEventListener('click', abrirModalSorteo);
             cerrarSorteo.addEventListener('click', cerrarModalSorteo);
+
+            // Preview instantáneo al seleccionar imagen de sorteo
+            const inputImgSorteo = document.getElementById('inputImgSorteo');
+            const previewImgSorteo = document.getElementById('previewImgSorteo');
+            if (inputImgSorteo && previewImgSorteo) {
+                inputImgSorteo.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        const file = this.files[0];
+                        if (!file.type.match('image.*')) {
+                            mostrarAlerta('Por favor selecciona un archivo de imagen válido (JPG, PNG, WEBP).', 'warning', 'Formato no soportado');
+                            return;
+                        }
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            previewImgSorteo.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
 
             // Cierre global con click afuera y tecla Escape
             window.addEventListener('click', (e) => {
