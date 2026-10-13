@@ -20,6 +20,7 @@ $totalCompras = 0;
 $todosSorteos = [];
 $todosAdmins = [];
 $sorteoActual = null;
+$top3Compradores = [];
 
 if ($pdo) {
     try {
@@ -101,6 +102,28 @@ if ($pdo) {
             ");
             $stmtCompras->execute([$sorteoIdActual]);
             $compras = $stmtCompras->fetchAll();
+
+            // Top 3 personas que han comprado más tickets en este sorteo (por cédula)
+            $stmtTop3 = $pdo->prepare("
+                SELECT 
+                    c.cedula,
+                    MAX(c.nombre_completo) AS nombre_completo,
+                    MAX(c.telefono) AS telefono,
+                    MAX(c.cod_pais) AS cod_pais,
+                    MAX(c.correo) AS correo,
+                    COUNT(t.id) AS total_tickets,
+                    SUM(CASE WHEN t.estado = 'validado' THEN 1 ELSE 0 END) AS tickets_validados,
+                    SUM(CASE WHEN t.estado = 'pendiente' THEN 1 ELSE 0 END) AS tickets_pendientes,
+                    GROUP_CONCAT(DISTINCT t.numero_ticket ORDER BY t.id ASC SEPARATOR ', ') AS numeros_tickets
+                FROM compras c
+                INNER JOIN tickets t ON t.compra_id = c.id
+                WHERE t.sorteo_id = ? AND t.estado != 'rechazado'
+                GROUP BY c.cedula
+                ORDER BY tickets_validados DESC, total_tickets DESC
+                LIMIT 3
+            ");
+            $stmtTop3->execute([$sorteoIdActual]);
+            $top3Compradores = $stmtTop3->fetchAll();
         }
 
         // Todos los administradores registrados
@@ -811,6 +834,148 @@ $todosAdmins = $todosAdmins ?? [];
             color: #fff;
         }
 
+        /* Botón y contenedor Top 3 */
+        .sorteo-active-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+            min-width: 260px;
+        }
+        .btn-top3-trigger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(255, 170, 0, 0.18));
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            color: #ffda44;
+            font-size: 0.84rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.08);
+        }
+        .btn-top3-trigger:hover {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 170, 0, 0.35));
+            border-color: #ffd700;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 18px rgba(255, 215, 0, 0.25);
+        }
+        .btn-top3-trigger i {
+            color: #ffd700;
+        }
+
+        /* Modal Top 3 */
+        .top3-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 18px 0 10px 0;
+        }
+        .top3-card {
+            background: #18181b;
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .top3-card:hover {
+            transform: translateY(-2px);
+        }
+        .top3-card.rank-1 {
+            border-color: rgba(255, 215, 0, 0.45);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.09), rgba(24, 24, 27, 0.95));
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.08);
+        }
+        .top3-card.rank-2 {
+            border-color: rgba(192, 192, 192, 0.35);
+            background: linear-gradient(135deg, rgba(192, 192, 192, 0.07), rgba(24, 24, 27, 0.95));
+        }
+        .top3-card.rank-3 {
+            border-color: rgba(205, 127, 50, 0.35);
+            background: linear-gradient(135deg, rgba(205, 127, 50, 0.07), rgba(24, 24, 27, 0.95));
+        }
+        .top3-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        .top3-card.rank-1 .top3-badge {
+            background: rgba(255, 215, 0, 0.18);
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.5);
+        }
+        .top3-card.rank-2 .top3-badge {
+            background: rgba(192, 192, 192, 0.18);
+            color: #e0e0e0;
+            border: 1px solid rgba(192, 192, 192, 0.5);
+        }
+        .top3-card.rank-3 .top3-badge {
+            background: rgba(205, 127, 50, 0.18);
+            color: #e59866;
+            border: 1px solid rgba(205, 127, 50, 0.5);
+        }
+        .top3-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .top3-nombre {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .top3-cedula {
+            font-size: 0.82rem;
+            color: var(--color-primario);
+            font-weight: 600;
+            font-family: monospace;
+            background: rgba(48, 209, 88, 0.1);
+            padding: 2px 8px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        .top3-meta {
+            font-size: 0.78rem;
+            color: var(--color-terciario);
+            margin-top: 4px;
+        }
+        .top3-stats {
+            text-align: right;
+            flex-shrink: 0;
+        }
+        .top3-tickets-count {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--color-primario);
+            line-height: 1;
+        }
+        .top3-tickets-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            color: var(--color-terciario);
+            letter-spacing: 0.5px;
+            margin-top: 3px;
+        }
+
         /* Dropdown Menú Gestión */
         .dropdown-gestion {
             position: relative;
@@ -1306,15 +1471,20 @@ $todosAdmins = $todosAdmins ?? [];
                     <i class="fa-solid fa-coins"></i> Precio: <strong style="color:var(--color-primario);">Bs. <?= number_format($sorteoActual['precio_unitario'], 2) ?></strong>
                 </p>
             </div>
-            <div class="sorteo-active-selector">
-                <label for="selectCambiarSorteo"><i class="fa-solid fa-filter"></i> Sorteo:</label>
-                <select id="selectCambiarSorteo" onchange="if(this.value) window.location.href='dashboard.php?sorteo_id=' + this.value">
-                    <?php foreach ($todosSorteos as $st): ?>
-                        <option value="<?= $st['id'] ?>" <?= $st['id'] == $sorteoActual['id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($st['titulo']) ?> <?= $st['activo'] ? '★ (Activo)' : '' ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+            <div class="sorteo-active-actions">
+                <div class="sorteo-active-selector">
+                    <label for="selectCambiarSorteo"><i class="fa-solid fa-filter"></i> Sorteo:</label>
+                    <select id="selectCambiarSorteo" onchange="if(this.value) window.location.href='dashboard.php?sorteo_id=' + this.value">
+                        <?php foreach ($todosSorteos as $st): ?>
+                            <option value="<?= $st['id'] ?>" <?= $st['id'] == $sorteoActual['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($st['titulo']) ?> <?= $st['activo'] ? '★ (Activo)' : '' ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <button type="button" class="btn-top3-trigger" id="btnAbrirTop3" title="Ver Top 3 compradores de este sorteo">
+                    <i class="fa-solid fa-trophy"></i> Top 3
+                </button>
             </div>
         </div>
 
@@ -1517,6 +1687,73 @@ $todosAdmins = $todosAdmins ?? [];
                     <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir en tamaño completo
                 </a>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal Top 3 Compradores -->
+    <div id="modalTop3" class="modal-receipt">
+        <div class="modal-receipt-box" style="max-width: 580px; text-align: left;">
+            <span class="close-modal-btn" id="cerrarTop3">&times;</span>
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:15px;">
+                <div style="width:48px; height:48px; border-radius:12px; background:linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,165,0,0.25)); color:#ffd700; border:1px solid rgba(255,215,0,0.4); display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0;">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div style="overflow:hidden;">
+                    <h3 style="color:#fff; font-size:1.25rem; margin:0;">Top 3 Compradores</h3>
+                    <p style="color:var(--color-terciario); font-size:0.85rem; margin:4px 0 0 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                        Sorteo: <strong style="color:#fff;"><?= htmlspecialchars($sorteoActual['titulo'] ?? '') ?></strong>
+                    </p>
+                </div>
+            </div>
+
+            <?php if (empty($top3Compradores)): ?>
+                <div style="text-align:center; padding:35px 20px; color:var(--color-terciario);">
+                    <i class="fa-solid fa-trophy" style="font-size:2.8rem; margin-bottom:12px; opacity:0.3; display:block;"></i>
+                    <p style="font-size:0.95rem; margin:0;">Aún no hay compras registradas para este sorteo.</p>
+                </div>
+            <?php else: ?>
+                <div class="top3-list">
+                    <?php 
+                        $medallas = [
+                            1 => ['emoji' => '🥇', 'clase' => 'rank-1', 'pos' => '#1', 'titulo' => '1er Lugar'],
+                            2 => ['emoji' => '🥈', 'clase' => 'rank-2', 'pos' => '#2', 'titulo' => '2do Lugar'],
+                            3 => ['emoji' => '🥉', 'clase' => 'rank-3', 'pos' => '#3', 'titulo' => '3er Lugar'],
+                        ];
+                        $pos = 1;
+                        foreach ($top3Compradores as $cTop): 
+                            $med = $medallas[$pos] ?? ['emoji' => '🎖️', 'clase' => '', 'pos' => "#$pos", 'titulo' => "$pos° Lugar"];
+                            $tlfLimpio = preg_replace('/[^0-9]/', '', ($cTop['cod_pais'] ?? '') . ($cTop['telefono'] ?? ''));
+                    ?>
+                        <div class="top3-card <?= $med['clase'] ?>">
+                            <div class="top3-badge">
+                                <span style="font-size:1.3rem;"><?= $med['emoji'] ?></span>
+                                <span style="font-size:0.7rem; font-weight:800;"><?= $med['pos'] ?></span>
+                            </div>
+                            <div class="top3-info">
+                                <div class="top3-nombre">
+                                    <span><?= htmlspecialchars($cTop['nombre_completo']) ?></span>
+                                    <span class="top3-cedula">C.I: <?= htmlspecialchars($cTop['cedula']) ?></span>
+                                </div>
+                                <div class="top3-meta">
+                                    <i class="fa-solid fa-phone" style="font-size:0.75rem;"></i> <?= htmlspecialchars(($cTop['cod_pais'] ?? '') . ' ' . ($cTop['telefono'] ?? '')) ?>
+                                    <?php if (!empty($tlfLimpio)): ?>
+                                        &bull; <a href="https://api.whatsapp.com/send?phone=<?= $tlfLimpio ?>" target="_blank" style="color:var(--color-primario); text-decoration:none; font-weight:600;"><i class="fa-brands fa-whatsapp"></i> Chat</a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <div class="top3-stats">
+                                <div class="top3-tickets-count"><?= number_format($cTop['total_tickets']) ?></div>
+                                <div class="top3-tickets-label">
+                                    <?= $cTop['total_tickets'] == 1 ? 'Boleto' : 'Boletos' ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php 
+                        $pos++;
+                        endforeach; 
+                    ?>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -1794,6 +2031,29 @@ $todosAdmins = $todosAdmins ?? [];
 
             cerrarReceipt.addEventListener('click', ocultarModalReceipt);
 
+            // Modal Top 3 Compradores
+            const modalTop3 = document.getElementById('modalTop3');
+            const btnAbrirTop3 = document.getElementById('btnAbrirTop3');
+            const cerrarTop3 = document.getElementById('cerrarTop3');
+
+            if (btnAbrirTop3 && modalTop3) {
+                btnAbrirTop3.addEventListener('click', () => {
+                    modalTop3.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            function ocultarModalTop3() {
+                if (modalTop3) {
+                    modalTop3.style.display = 'none';
+                    document.body.style.overflow = '';
+                }
+            }
+
+            if (cerrarTop3) {
+                cerrarTop3.addEventListener('click', ocultarModalTop3);
+            }
+
             // 4. Cambiar Estado de Compra (Validar / Rechazar con AJAX)
             document.querySelectorAll('.btn-cambiar-estado').forEach(btn => {
                 btn.addEventListener('click', async () => {
@@ -1905,6 +2165,7 @@ $todosAdmins = $todosAdmins ?? [];
                 if (e.target === modalReceipt) ocultarModalReceipt();
                 if (e.target === modalSorteo) cerrarModalSorteo();
                 if (e.target === modalBoletos) ocultarModalBoletos();
+                if (e.target === modalTop3) ocultarModalTop3();
             });
 
             document.addEventListener('keydown', (e) => {
@@ -1913,6 +2174,7 @@ $todosAdmins = $todosAdmins ?? [];
                     if (modalReceipt && modalReceipt.style.display === 'flex') ocultarModalReceipt();
                     if (modalSorteo && modalSorteo.style.display === 'flex') cerrarModalSorteo();
                     if (modalBoletos && modalBoletos.style.display === 'flex') ocultarModalBoletos();
+                    if (modalTop3 && modalTop3.style.display === 'flex') ocultarModalTop3();
                 }
             });
 
