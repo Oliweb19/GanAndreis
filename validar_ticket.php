@@ -39,7 +39,7 @@
                 <ul>
                     <li> <a href="index.php"> <i class="fa-solid fa-house"></i> Inicio</a></li>
                     <li> <a href="validar_ticket.php"> <i class="fa-solid fa-ticket"></i> Ticket</a></li>
-                    <li> <a href="https://api.whatsapp.com/send/?phone=584241733873&text=Hola,%20necesito%20ayuda%20con%20GanAndreis" target="_blank"> <i class="fa-solid fa-phone"></i> Ayuda</a></li>
+                    <li> <a href="https://api.whatsapp.com/send/?phone=584226361960&text=Hola,%20necesito%20ayuda%20con%20GanAndreis" target="_blank"> <i class="fa-solid fa-phone"></i> Ayuda</a></li>
                 </ul>
             </div>
 
@@ -101,7 +101,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <p>¿Algún problema con tu ticket? <a href="https://api.whatsapp.com/send/?phone=584241733873&text=Hola,%20tengo%20un%20inconveniente%20con%20mis%20tickets" target="_blank">Contáctanos por WhatsApp</a></p>
+                    <p>¿Algún problema con tu ticket? <a href="https://api.whatsapp.com/send/?phone=584226361960&text=Hola,%20tengo%20un%20inconveniente%20con%20mis%20tickets" target="_blank">Contáctanos por WhatsApp</a></p>
                 </div>
             </div>
         </div>
@@ -122,7 +122,7 @@
                 <ul>
                     <li><i class="fa-brands fa-instagram"></i> @Andreis_busines</li>
                     <li><i class="fa-brands fa-tiktok"></i> @Andreis_business</li>
-                    <li><i class="fa-brands fa-whatsapp"></i> 0424-1733873</li>
+                    <li><i class="fa-brands fa-whatsapp"></i> 0422-6361960</li>
                 </ul>
             </div>
         </div>

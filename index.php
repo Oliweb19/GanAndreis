@@ -221,7 +221,7 @@ $totalDolaresInicial = ($tasaBCV > 0) ? ($precioUnitario / $tasaBCV) : 0;
                 <ul>
                     <li> <a href="index.php"> <i class="fa-solid fa-house"></i> Inicio</a></li>
                     <li> <a href="validar_ticket.php"> <i class="fa-solid fa-ticket"></i> Ticket</a></li>
-                    <li> <a href="https://api.whatsapp.com/send/?phone=584241733873&text=Hola,%20necesito%20informacion%20sobre%20el%20sorteo" target="_blank"> <i class="fa-solid fa-phone"></i> Ayuda</a></li>
+                    <li> <a href="https://api.whatsapp.com/send/?phone=584226361960&text=Hola,%20necesito%20informacion%20sobre%20el%20sorteo" target="_blank"> <i class="fa-solid fa-phone"></i> Ayuda</a></li>
                 </ul>
             </div>
 
@@ -367,7 +367,7 @@ $totalDolaresInicial = ($tasaBCV > 0) ? ($precioUnitario / $tasaBCV) : 0;
                 <ul>
                     <li><i class="fa-brands fa-instagram"></i> @Andreis_busines</li>
                     <li><i class="fa-brands fa-tiktok"></i> @Andreis_business</li>
-                    <li><i class="fa-brands fa-whatsapp"></i> 0424-1733873</li>
+                    <li><i class="fa-brands fa-whatsapp"></i> 0422-6361960</li>
                 </ul>
             </div>
         </div>

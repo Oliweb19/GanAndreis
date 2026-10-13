@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tlfCompleto = `${codPais} ${telefono}`;
 
         // Número de destino (Tu empresa)
-        const numeroEmpresa = "584241733873"; 
+        const numeroEmpresa = "584226361960"; 
 
         // Mensaje estructurado con saltos de línea (%0A)
         const mensaje = `

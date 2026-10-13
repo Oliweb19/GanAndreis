@@ -149,7 +149,7 @@ if ($pdo) {
 }
 
 // Preparar URL para WhatsApp
-$numeroEmpresa = "584241733873";
+$numeroEmpresa = "584226361960";
 $ticketsStr = implode(', ', $ticketsGenerados);
 $tasaBCV = obtenerTasaBCV();
 $totalUSD = ($tasaBCV > 0) ? ($totalMonto / $tasaBCV) : 0;

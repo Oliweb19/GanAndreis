@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <ul>
                     <li> <a href="index.php"> <i class="fa-solid fa-house"></i> Inicio</a></li>
                     <li> <a href="validar_ticket.php"> <i class="fa-solid fa-ticket"></i> Ticket</a></li>
-                    <li> <a href="https://api.whatsapp.com/send/?phone=584241733873&text=Hola,%20necesito%20ayuda" target="_blank"> <i class="fa-solid fa-phone"></i> Ayuda</a></li>
+                    <li> <a href="https://api.whatsapp.com/send/?phone=584226361960&text=Hola,%20necesito%20ayuda" target="_blank"> <i class="fa-solid fa-phone"></i> Ayuda</a></li>
                 </ul>
             </div>
 
@@ -146,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="actions">
-                        <a href="https://api.whatsapp.com/send/?phone=584241733873&text=Hola,%20olvide%20mi%20clave%20de%20administrador" target="_blank">¿Olvidaste tu contraseña?</a>
+                        <a href="https://api.whatsapp.com/send/?phone=584226361960&text=Hola,%20olvide%20mi%20clave%20de%20administrador" target="_blank">¿Olvidaste tu contraseña?</a>
                     </div>
 
                     <button type="submit" class="btn-login">INGRESAR AL SISTEMA</button>
@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="box-social">
                         <a href="https://www.instagram.com/Andreis_busines" target="_blank"><i class="fa-brands fa-instagram"></i></a>
                         <a href="https://www.tiktok.com/@Andreis_business" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-                        <a href="https://wa.me/584241733873" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="https://wa.me/584226361960" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
                     </div>
                 </div>
             </div>
@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <ul>
                     <li><i class="fa-brands fa-instagram"></i> @Andreis_busines</li>
                     <li><i class="fa-brands fa-tiktok"></i> @Andreis_business</li>
-                    <li><i class="fa-brands fa-whatsapp"></i> 0424-1733873</li>
+                    <li><i class="fa-brands fa-whatsapp"></i> 0422-6361960</li>
                 </ul>
             </div>
         </div>
